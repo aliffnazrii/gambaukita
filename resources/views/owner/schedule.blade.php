@@ -51,11 +51,35 @@
             background-color: #f8f9fa;
             color: #495057;
         }
+
+        #calendar {
+            max-width: 100%;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .fc-toolbar-title {
+            white-space: nowrap;
+            /* Prevent overlapping or duplicated titles */
+        }
+
+        .fc .fc-daygrid-event {
+            overflow: hidden;
+            /* Prevent overflow of event names */
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            /* Truncate long event titles */
+        }
     </style>
+
 @endsection
 
 @section('content')
-    <link href="../../assets/plugins/fullcalender/css/fullcalendar.css" rel="stylesheet">
+
+    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.8/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@6.1.8/index.global.min.js"></script>
 
     <!-- Local Bootstrap CSS -->
     <link href="../..assets/bootstrap.min.css" rel="stylesheet">
@@ -80,25 +104,34 @@
 
         <div class="row">
             <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
+                <div class="card my-auto">
+                    <div class="card-body my-auto">
                         <div class="card-title">
-                            <h1>Calendar</h1>
+                            <h1>Schedule Calendar</h1>
                         </div>
-                        <div class="row justify-content-center">
+                        <div class="row justify-content-center my-auto">
 
                             <div class="col-md-12">
                                 <div class="card-box m-b-50">
                                     <div id="calendar"></div>
-
-                                    <script>
+                                     <script>
                                         document.addEventListener('DOMContentLoaded', function() {
                                             var calendarEl = document.getElementById('calendar');
 
+                                            // Create the events array directly in JavaScript
+                                            var events = [
+                                                @foreach ($schedules as $schedule)
+                                                    {
+                                                        title: "{{ $schedule->title }}",
+                                                        start: "{{ $schedule->start }}T{{ $schedule->time }}", // Combine date and time for the start field
+                                                        end: "{{ $schedule->end }}T{{ $schedule->time }}", // Combine date and time for the end field
+                                                    },
+                                                @endforeach
+                                            ];
+
                                             var calendar = new FullCalendar.Calendar(calendarEl, {
-                                                plugins: ['dayGrid'],
-                                                initialView: 'dayGridMonth',
-                                                events: {{ route('owner.getEvents') }}, // URL to fetch events
+                                                initialView: 'dayGridMonth', // Switch to a week view with times
+                                                events: events, // Use the directly generated array
                                             });
 
                                             calendar.render();
@@ -130,9 +163,18 @@
                 @csrf
                 <!-- Date Picker -->
                 <div class="form-group">
-                    <label for="datePicker">Select Date:</label>
+                    <label for="datePicker">Start Date:</label>
                     <div class='input-group date' id='datePicker'>
-                        <input type='text' class="form-control" placeholder="YYYY-MM-DD" />
+                        <input type='date' class="form-control" name="start" placeholder="YYYY-MM-DD" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="datePicker">End Date:</label>
+                    <div class='input-group date' id='datePicker'>
+                        <input type='date' class="form-control" name="end" placeholder="YYYY-MM-DD" />
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
@@ -143,7 +185,7 @@
                 <div class="form-group">
                     <label for="timePicker">Select Time:</label>
                     <div class='input-group date' id='timePicker'>
-                        <input type='text' class="form-control" placeholder="HH:mm" />
+                        <input type='time' name="time" class="form-control" placeholder="HH:mm" />
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-time"></span>
                         </span>
@@ -161,7 +203,7 @@
 
         <!-- Day Off Timetable -->
         <div class="card p-3">
-            <h3>Approved Day Off Timetable</h3>
+            <h3>Schedules</h3>
             <table id="dayOffTable" class="table table-striped">
                 <thead>
                     <tr>

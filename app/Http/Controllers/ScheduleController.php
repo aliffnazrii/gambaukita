@@ -41,6 +41,7 @@ class ScheduleController extends Controller
             'start' => 'required|date',
             'end' => 'required|date',
             'title' => 'required|string|max:255',
+            'time' => 'required|date_format:H:i',
         ]);
 
         Schedule::create($validatedData);

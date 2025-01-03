@@ -25,7 +25,7 @@ Route::resource('bookings', BookingController::class)->middleware('clientLogin')
 Route::resource('payments', PaymentController::class)->middleware('clientLogin');
 Route::resource('invoices', InvoiceController::class)->middleware('clientLogin');
 Route::resource('package-images', PackageImageController::class);
-Route::resource('schedules', ScheduleController::class)->middleware('CheckUserRole');
+Route::resource('schedules', ScheduleController::class)->middleware('ownerLogin');
 Route::resource('portfolios', PortfolioController::class);
 Route::resource('users', UserController::class);
 
