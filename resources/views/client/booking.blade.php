@@ -7,6 +7,9 @@
     <script
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA08tler_Ei6E7v6peMa9VWVu1MEtrhll0&libraries=places&callback=initMap"
         async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.8/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@6.1.8/index.global.min.js"></script>
     <style>
         #map {
             height: 400px;
@@ -77,14 +80,26 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-form-label text-right" for="event_date">Event Date <span
-                                            class="text-danger">*</span></label>
-                                    <div class="col-lg-6">
-                                        <input type="date" class="form-control" id="event_date" name="event_date"
-                                            required>
+
+                                @if (session('bookingDate'))
+                                    <div class="form-group row">
+                                        <label class="col-lg-4 col-form-label text-right" for="event_date">Event Date <span
+                                                class="text-danger">*</span></label>
+                                        <div class="col-lg-6">
+                                            <input type="date" class="form-control" id="event_date" name="event_date"
+                                                value="{{ session('bookingDate') }}" required>
+                                        </div>
                                     </div>
-                                </div>
+                                @else
+                                    <div class="form-group row">
+                                        <label class="col-lg-4 col-form-label text-right" for="event_date">Event Date <span
+                                                class="text-danger">*</span></label>
+                                        <div class="col-lg-6">
+                                            <input type="date" class="form-control" id="event_date" name="event_date"
+                                                required>
+                                        </div>
+                                    </div>
+                                @endif
 
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-form-label text-right" for="event_time">Event Time <span
@@ -160,16 +175,57 @@
                                     required>
                                 <button type="submit" class="btn btn-primary mt-3">Check</button>
                             </form>
-                        @endif
-
-
                     </div>
-
-
                 </div>
+                <div class="card my-auto border my-5">
+                    <div class="card-body my-auto">
+                        <div class="card-title">
+                            <h1>Booking Calendar</h1>
+                        </div>
+                        <div class="row justify-content-center my-auto">
+
+                            <div class="col-md-12">
+                                <div class="card-box m-b-50">
+                                    <div id="calendar"></div>
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', function() {
+                                            var calendarEl = document.getElementById('calendar');
+
+                                            // Create the events array directly in JavaScript
+                                            var events = [
+                                                @foreach ($schedules as $schedule)
+                                                    {
+                                                        title: "{{ $schedule->title }}",
+                                                        start: "{{ $schedule->start }}T{{ $schedule->time }}", // Combine date and time for the start field
+                                                        end: "{{ $schedule->end }}T{{ $schedule->time }}", // Combine date and time for the end field
+                                                    },
+                                                @endforeach
+                                            ];
+
+                                            var calendar = new FullCalendar.Calendar(calendarEl, {
+                                                initialView: 'dayGridMonth', // Switch to a week view with times
+                                                events: events, // Use the directly generated array
+                                            });
+
+                                            calendar.render();
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                @endif
+
 
             </div>
+
+
         </div>
+
+    </div>
+    </div>
     </div>
     {{-- API KEY : AIzaSyA08tler_Ei6E7v6peMa9VWVu1MEtrhll0 --}}
     {{-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA08tler_Ei6E7v6peMa9VWVu1MEtrhll0&callback=initMap&v=weekly" async defer></script> --}}

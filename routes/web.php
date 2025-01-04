@@ -40,6 +40,9 @@ Route::get('/about', function () {
     return view('client.about');
 });
 
+
+
+
 #UPDATE PROFILE PICTURE
 Route::put('/users/update-picture/{id}', [UserController::class, 'updateProfilePicture'])->middleware('clientLogin');
 
