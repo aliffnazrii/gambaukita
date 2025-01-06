@@ -1,10 +1,9 @@
-@extends('layout.client')
+@extends('layout.invoice')
 
 @section('title', 'Invoice')
 
+
 @section('content')
-
-
 
     <div class="container mt-5">
         <h1 class="text-center mb-4">Invoice Details</h1>
@@ -17,19 +16,19 @@
                 <table class="table table-bordered">
                     <tr>
                         <th>Invoice ID:</th>
-                        <td>#INV001</td>
+                        <td>{{ $invoice->id }}</td>
                     </tr>
                     <tr>
                         <th>Invoice Date:</th>
-                        <td>2023/11/28</td>
+                        <td>{{ $invoice->invoice_date }}</td>
                     </tr>
                     <tr>
                         <th>Amount:</th>
-                        <td>$2,000</td>
+                        <td>{{ number_format($invoice->total_amount) }}</td>
                     </tr>
                     <tr>
                         <th>Status:</th>
-                        <td>Pending</td>
+                        <td>{{ $invoice->status }}</td>
                     </tr>
                 </table>
 
@@ -67,10 +66,7 @@
                         <th>Progress Status:</th>
                         <td>{{ $booking->progress_status }}</td>
                     </tr>
-                    <tr>
-                        <th>Booking Status:</th>
-                        <td>{{ $booking->booking_status }}</td>
-                    </tr>
+
                     <tr>
                         <th>Total Price:</th>
                         <td>RM{{ number_format($booking->total_price, 2) }}</td>
@@ -78,7 +74,7 @@
                 </table>
 
                 <div class="text-center mt-4">
-                    <button class="btn btn-primary" onclick="window.print()">Print Full Invoice</button>
+                    <button class="btn btn-primary" onclick="window.print()">Print Invoice</button>
                     <a href="{{ route('bookings.show', $booking->id) }}" class="btn btn-secondary">Back to Booking
                         Details</a>
                 </div>

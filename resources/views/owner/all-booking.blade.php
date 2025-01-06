@@ -22,6 +22,7 @@
                             <th class="py-2 px-4 border-b border-gray-300 text-left text-gray-700">Event Date</th>
                             <th class="py-2 px-4 border-b border-gray-300 text-left text-gray-700">Event Time</th>
                             <th class="py-2 px-4 border-b border-gray-300 text-left text-gray-700">Total Price</th>
+                            <th class="py-2 px-4 border-b border-gray-300 text-left text-gray-700">Status</th>
                             <th class="py-2 px-4 border-b border-gray-300 text-left text-gray-700">Action</th>
                         </tr>
                     </thead>
@@ -37,6 +38,9 @@
 
                                 <td class="py-2 px-4 border-b border-gray-300">
                                     RM{{ number_format($booking->total_price, 2) }}</td>
+                                <td class="py-2 px-4 border-b border-gray-300">
+                                    {{ $booking->progress_status }}</td>
+                                    
                                 <td class="py-2 px-4 border-b border-gray-300">
                                     <a href="{{ route('bookings.edit', $booking->id) }}"
                                         class="view-btn btn btn-primary">View</a>

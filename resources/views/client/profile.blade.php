@@ -232,9 +232,7 @@
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item"><strong>Email:</strong> {{ $user->email }}</li>
                             <li class="list-group-item"><strong>Phone Number:</strong> {{ $user->phone }}</li>
-                            <li class="list-group-item"><strong>Address:</strong> {{ $user->address }}</li>
-                            <li class="list-group-item"><strong>Date of Birth:</strong> January 1, 1990</li>
-                            <li class="list-group-item"><strong>Membership Status:</strong> Active</li>
+                            <li class="list-group-item"><strong>Address:</strong> {{ $user->address }} {{ $user->postcode }} {{ $user->city }} {{ $user->state }}</li>
                         </ul>
                     </div>
                 </div>
@@ -242,13 +240,12 @@
                 <!-- Order History Section -->
                 <div class="card mt-4 border">
                     <div class="card-header">
-                        <h4>Order History</h4>
+                        <h4>Bookings</h4>
                     </div>
                     <div class="card-body">
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item"><strong>Order #1:</strong> January 15, 2023 - RM 100.00</li>
-                            <li class="list-group-item"><strong>Order #2:</strong> February 20, 2023 - RM 150.00</li>
-                            <li class="list-group-item"><strong>Order #3:</strong> March 25, 2023 - RM 200.00</li>
+                            <li class="list-group-item"><strong>{{ 'Package'}} :</strong> {{  'TARIKH'}} - {{  'AMOUNT'}}</li>
+                           
                         </ul>
                     </div>
                 </div>

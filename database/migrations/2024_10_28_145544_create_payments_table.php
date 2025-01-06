@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('booking_id');
             $table->string('type'); // e.g., "deposit" or "balance"
             $table->decimal('amount', 10, 2); // Amount for the payment
-            $table->string('status'); // e.g., "pending", "completed"
+            $table->enum('status',(['Pending', 'Completed','Cancelled']))->default('Pending'); // e.g., "pending", "completed"
             $table->string('transaction_id')->nullable(); // Stripe transaction ID or payment intent ID
             $table->string('payment_method')->nullable(); // e.g., "card", "fpx"
             $table->timestamps();

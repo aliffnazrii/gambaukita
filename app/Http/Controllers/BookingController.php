@@ -27,7 +27,7 @@ class BookingController extends Controller
     {
         $packages = Package::all();
         $schedules = Schedule::all();
-        return view('client.booking', compact('packages','schedules'));
+        return view('client.booking', compact('packages', 'schedules'));
     }
 
     public function checkdate(Request $req)
@@ -50,68 +50,6 @@ class BookingController extends Controller
             return back()->with('msg', 'The particular date is available');
         }
     }
-
-
-    // public function checkDate(Request $request)
-    // {
-    //     $request->validate([
-    //         'checkdate_input' => 'required|date|after:today', // Ensures the date is valid and after today
-    //     ]);
-
-    //     $bookingDate = $request->input('checkdate_input');
-    //     $isDateAvailable = $this->isDateAvailable($bookingDate);
-
-    //     // Check if the date is available using the isDateAvailable method
-    //     if ($isDateAvailable) {
-    //         // If the date is available, store it in the session
-    //         // session()->put('event_date', $bookingDate);
-
-    //         // Redirect to Step 2
-    //         return redirect()->route('bookings.step2')->with('msg', 'The selected date is available.');
-    //         return redirect('/');
-    //     } else {
-    //         // If the date is unavailable, redirect back to Step 1 with an error
-    //         return back()->withErrors(['checkdate_input' => 'The selected date is unavailable. Please choose a different date.']);
-    //         // return back();
-    //     }
-    // }
-
-
-
-    // Example function to check date availability (customize as needed)
-    // private function isDateAvailable($bookingDate)
-    // {
-    //     // Check if the selected date exists in the Schedule table
-    //     $schedule = Schedule::where('start', $bookingDate)->first();
-
-    //     // Check if the selected date already has a booking
-    //     $otherBookings = Booking::where('event_date', $bookingDate)->first();
-
-    //     // If the date exists in either table, it is unavailable
-    //     if ($schedule || $otherBookings) {
-    //         return false; // Date is unavailable
-    //     }
-
-    //     // If no conflicts are found, the date is available
-    //     return true;
-    // }
-
-
-    // public function step2()
-    // {
-    //     // Check if the event date is stored in the session
-    //     if (!session()->has('event_date')) {
-    //         return redirect()->route('bookings.create')->with('error', 'Please select a valid date first.');
-    //     }
-
-    //     // Retrieve the event date from the session
-    //     $eventDate = session('event_date');
-
-    //     // Pass the date to the view (if needed)
-
-    //     $packages = Package::all();
-    //     return redirect()->route('bookings.create',compact('eventDate','packages'));
-    // }
 
 
 
@@ -191,8 +129,12 @@ class BookingController extends Controller
 
     public function showInvoice($id)
     {
-        $booking = Booking::with(['user', 'package', 'payments', 'invoices'])->findOrFail($id);
-        return view('client.invoice', compact('booking'));
+        // $booking = Booking::with(['user', 'package', 'payments', 'invoices'])->findOrFail($id);
+        $invoice = Invoice::findOrFail($id);
+
+        $booking = Booking::findOrFail($invoice->booking_id);
+
+        return view('client.invoice', compact('invoice','booking'));
     }
 
     // Show the form for editing the specified booking

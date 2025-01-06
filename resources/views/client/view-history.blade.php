@@ -16,13 +16,14 @@
             </div>
             <div class="card-body">
                 <form>
+
                     <div class="form-group">
-                        <label for="userId">User ID:</label>
-                        <input type="text" class="form-control" id="userId" value="{{ $booking->user_id }}" readonly>
+                        <label for="packageId">User Name:</label>
+                        <input type="text" class="form-control" id="packageId" value="{{ $booking->user->name }}" readonly>
                     </div>
                     <div class="form-group">
-                        <label for="packageId">Package ID:</label>
-                        <input type="text" class="form-control" id="packageId" value="{{ $booking->package_id }}"
+                        <label for="packageId">Package:</label>
+                        <input type="text" class="form-control" id="packageId" value="{{ $booking->package->name }}"
                             readonly>
                     </div>
                     <div class="form-group">
@@ -53,11 +54,7 @@
                         <input type="text" class="form-control" id="progressStatus"
                             value="{{ $booking->progress_status }}" readonly>
                     </div>
-                    <div class="form-group">
-                        <label for="bookingStatus">Booking Status:</label>
-                        <input type="text" class="form-control" id="bookingStatus" value="{{ $booking->booking_status }}"
-                            readonly>
-                    </div>
+
                     <div class="form-group">
                         <label for="totalPrice">Total Price:</label>
                         <input type="text" class="form-control" id="totalPrice"
@@ -67,39 +64,81 @@
             </div>
         </div>
 
-        <!-- Invoice Details Card -->
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0">Invoice Details</h5>
-            </div>
-            <div class="card-body">
-                <table class="table table-bordered">
-                    <tr>
-                        <th>Invoice ID:</th>
-                        <td>#INV001</td>
-                    </tr>
-                    <tr>
-                        <th>Invoice Date:</th>
-                        <td>2023/11/28</td>
-                    </tr>
-                    <tr>
-                        <th>Amount:</th>
-                        <td>$2,000</td>
-                    </tr>
-                    <tr>
-                        <th>Status:</th>
-                        <td>Pending</td>
-                    </tr>
-                </table>
-  
-                <!-- Action Buttons -->
-                <div class="text-center mt-4">
-                    <a href="javascript:history.back()" class="btn btn-secondary">Back</a>
-                    <button class="btn btn-primary" onclick="window.print()">Print Invoice</button>
-                    <a href="{{ route('booking.showInvoice', $booking->id) }}" class="btn btn-info">View Invoice</a>
+        @if ($booking->progress_status == 'Completed')
+
+
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Receipt Details</h5>
                 </div>
+                @foreach ($booking->payments as $payment)
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            {{-- <tr>
+                                <th>Invoice ID:</th>
+                                <td>INV{{ $invoice->invoice_number }}</td>
+                            </tr> --}}
+                            <tr>
+                                <th>Date:</th>
+                                <td>{{ $payment->invoice_date }}</td>
+                            </tr>
+                            <tr>
+                                <th>Amount:</th>
+                                <td>RM {{ number_format($payment->total_amount, 2) }}</td>
+                            </tr>
+                            <tr>
+                                <th>Status:</th>
+                                <td>{{ $payment->status }}</td>
+                            </tr>
+                        </table>
+
+                        <!-- Action Buttons -->
+                        <div class="text-center mt-4">
+                            <a href="javascript:history.back()" class="btn btn-secondary">Back</a>
+                            <a href="{{ route('booking.showInvoice', $payment->id) }}" class="btn btn-info">View
+                                Receipt</a>
+                        </div>
+                    </div>
+                @endforeach
             </div>
-        </div>
+        @else
+            <!-- Invoice Details Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Invoice Details</h5>
+                </div>
+                @foreach ($booking->invoices as $invoice)
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Invoice ID:</th>
+                                <td>INV{{ $invoice->invoice_number }}</td>
+                            </tr>
+                            <tr>
+                                <th>Invoice Date:</th>
+                                <td>{{ $invoice->invoice_date }}</td>
+                            </tr>
+                            <tr>
+                                <th>Amount:</th>
+                                <td>RM {{ number_format($invoice->total_amount, 2) }}</td>
+                            </tr>
+                            <tr>
+                                <th>Status:</th>
+                                <td>{{ $invoice->status }}</td>
+                            </tr>
+                        </table>
+
+                        <!-- Action Buttons -->
+                        <div class="text-center mt-4">
+                            <a href="{{route('bookings.index')}}" class="btn btn-secondary">Back</a>
+                           
+                            <a href="{{ route('booking.showInvoice', $invoice->id) }}" target='blank' class="btn btn-info">View
+                                Invoice</a>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @endif
     </div>
 
 @endsection

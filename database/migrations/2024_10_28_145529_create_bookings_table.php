@@ -19,16 +19,18 @@ return new class extends Migration
             $table->date('event_date');
             $table->time('event_time');
             $table->string('remark')->nullable();
-            $table->string('acceptance_status')->nullable();
-            $table->string('progress_status')->nullable();
+            $table->enum('acceptance_status', ['Pending', 'accepted', 'rejected'])->nullable()->default('Pending'); // Add appropriate options
+            $table->enum('progress_status', ['Pending','Booked', 'Waiting', 'Completed', 'Cancelled'])->nullable()->default('Pending'); // Add appropriate options
             $table->integer('deposit_percentage');
             $table->decimal('total_price', 10, 2);
             $table->timestamps();
-
+            
+            
             // Optional: Add foreign key constraints if 'users' and 'packages' tables exist
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('package_id')->references('id')->on('packages')->onDelete('cascade');
         });
+        
     }
 
     /**

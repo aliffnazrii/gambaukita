@@ -22,8 +22,8 @@ class Booking extends Model
         'total_price',
     ];
 
-    // Relationship with User
-    public function user()
+    // Relationship with User 
+    public function user() 
     {
         return $this->belongsTo(User::class);
     }
