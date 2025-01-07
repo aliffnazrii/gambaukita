@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description');
+            $table->text('features'); // what the owner provide in the package
             $table->decimal('price', 10, 2);
             $table->integer('duration');
             $table->enum('status',(['Active', 'Inactive']))->default('Active');

@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('email')->unique(); // User's email (unique)
             $table->string('password'); // User's password
             $table->string('phone')->nullable(); // User's phone number
-            $table->string('role')->default('client'); // User's role (e.g., admin, user)
+            $table->enum('role', (['Owner', 'Client']))->default('Client'); // User's role (e.g., admin, user)
             $table->string('address')->nullable(); // User's address
             $table->string('postcode')->nullable(); // User's postcode
             $table->string('city')->nullable(); // User's city

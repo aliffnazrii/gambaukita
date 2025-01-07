@@ -147,16 +147,16 @@ class PackageController extends Controller
         return redirect()->back()->with('success', 'Package updated successfully.');
     }
 
-    // Remove the specified package from the database
-    public function destroy($id)
-    {
-        $package = Package::findOrFail($id);
+    // // Remove the specified package from the database
+    // public function destroy($id)
+    // {
+    //     $package = Package::findOrFail($id);
 
-        $status = 'inactive';
-        // Set the 'status' column to 'inactive'
-        $package->update(['status' =>  $status]);
-        return redirect()->route('owner.package')->with('success', 'Package deleted successfully.');
-    }
+    //     $status = 'inactive';
+    //     // Set the 'status' column to 'inactive'
+    //     $package->update(['status' =>  $status]);
+    //     return redirect()->route('owner.package')->with('success', 'Package deleted successfully.');
+    // }
 
 
 
@@ -175,5 +175,11 @@ class PackageController extends Controller
 
         $package = Package::where('id', $id)->with('images')->first();
         return view('owner.open-package', compact('package'));
+    }
+    
+    
+    public function viewPackage($id){
+        $package = Package::with('images')->findOrFail($id);
+    return view('client.viewPackage',compact('package'));
     }
 }

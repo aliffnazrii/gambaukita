@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Package;
 
 class HomeController extends Controller
 {
@@ -23,6 +24,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('client.home');
+
+        $packs = Package::with('images')->where('status', 'Active')->get();
+        return view('client.home', compact('packs'));
     }
+
 }

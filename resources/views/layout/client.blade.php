@@ -7,10 +7,12 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>@yield('title', 'default title')</title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon.png">
-    <link href="../../assets/plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <link href="../css/style.css" rel="stylesheet">
-    <script src="../js/modernizr-3.6.0.min.js"></script>
+
+    <link rel="icon" type="image/png" sizes="16x16" href=" {{ URL::asset('assets/images/favicon.png') }}">
+    <link href=" {{ URL::asset('assets/plugins/tables/css/datatable/dataTables.bootstrap4.min.css') }}"
+        rel="stylesheet">
+    <link href="{{ URL::asset('css/style.css') }}" rel="stylesheet">
+    <script src=" {{ URL::asset('js/modernizr-3.6.0.min.js') }}"></script>
     @yield('header')
 </head>
 
@@ -27,7 +29,8 @@
     <!-- header -->
     <div class="header" style="z-index:10;">
         <div class="nav-header">
-            <div class="brand-logo"><a href="/main-home"><b><img src="../../assets/images/logo.png" alt="">
+            <div class="brand-logo"><a href="/main-home"><b><img src="{{ URL::asset('assets/images/logo.png') }}"
+                            alt="">
                     </b><span class="brand-title">GambauKita.my</span></a>
             </div>
             <div class="nav-control">
@@ -52,7 +55,7 @@
                                     <li>
                                         <a href="#">
                                             <img class="pull-left m-r-10 avatar-img"
-                                                src="../../assets/images/avatar/1.jpg" alt="">
+                                                src="{{ URL::asset('assets/images/avatar/1.jpg') }}" alt="">
                                             <div class="notification-content"><small
                                                     class="notification-timestamp pull-right">02:34 PM</small>
                                                 <div class="notification-heading">Mr. Dmitry</div>
@@ -63,7 +66,7 @@
                                     <li>
                                         <a href="#">
                                             <img class="pull-left m-r-10 avatar-img"
-                                                src="../../assets/images/avatar/2.jpg" alt="">
+                                                src="{{ URL::asset('assets/images/avatar/1.jpg') }}" alt="">
                                             <div class="notification-content"><small
                                                     class="notification-timestamp pull-right">02:34 PM</small>
                                                 <div class="notification-heading">Mariam</div>
@@ -74,7 +77,7 @@
                                     <li>
                                         <a href="#">
                                             <img class="pull-left m-r-10 avatar-img"
-                                                src="../../assets/images/avatar/3.jpg" alt="">
+                                                src="{{ URL::asset('assets/images/avatar/1.jpg') }}" alt="">
                                             <div class="notification-content"><small
                                                     class="notification-timestamp pull-right">02:34 PM</small>
                                                 <div class="notification-heading">Tasnim</div>
@@ -86,7 +89,7 @@
                                     <li>
                                         <a href="#">
                                             <img class="pull-left m-r-10 avatar-img"
-                                                src="../../assets/images/avatar/4.jpg" alt="">
+                                                src="{{ URL::asset('assets/images/avatar/1.jpg') }}" alt="">
                                             <div class="notification-content"><small
                                                     class="notification-timestamp pull-right">02:34 PM</small>
                                                 <div class="notification-heading">Ishrat Jahan</div>
@@ -114,7 +117,7 @@
                                     <li class="notification-unread">
                                         <a href="#">
                                             <img class="pull-left m-r-10 avatar-img"
-                                                src="../../assets/images/avatar/2.jpg" alt="">
+                                                src="{{ URL::asset('assets/images/avatar/1.jpg') }}" alt="">
                                             <div class="notification-content"><small
                                                     class="notification-timestamp pull-right">02:34 PM</small>
                                                 <div class="notification-heading">Ishrat Jahan</div>
@@ -126,7 +129,7 @@
                                     <li>
                                         <a href="#">
                                             <img class="pull-left m-r-10 avatar-img"
-                                                src="../../assets/images/avatar/3.jpg" alt="">
+                                                src="{{ URL::asset('assets/images/avatar/1.jpg') }}" alt="">
                                             <div class="notification-content"><small
                                                     class="notification-timestamp pull-right">02:34 PM</small>
                                                 <div class="notification-heading">Saiul Islam</div>
@@ -138,7 +141,7 @@
                                     <li>
                                         <a href="#">
                                             <img class="pull-left m-r-10 avatar-img"
-                                                src="../../assets/images/avatar/4.jpg" alt="">
+                                                src="{{ URL::asset('assets/images/avatar/1.jpg') }}" alt="">
                                             <div class="notification-content"><small
                                                     class="notification-timestamp pull-right">02:34 PM</small>
                                                 <div class="notification-heading">Ishrat Jahan</div>
@@ -300,22 +303,23 @@
     <!-- #/ footer -->
 
     <!-- Common JS -->
-    <script src="../../assets/plugins/common/common.min.js"></script>
+    <script src="{{ URL::asset('assets/plugins/common/common.min.js') }}"></script>
     <!-- Custom script -->
-    <script src="../js/custom.min.js"></script>
+    <script src="{{ URL::asset('js/custom.min.js') }}"></script>
     <!-- Chartjs chart -->
-    <script src="../../assets/plugins/chartjs/Chart.bundle.js"></script>
+    <script src="{{ URL::asset('assets/plugins/chartjs/Chart.bundle.js') }}"></script>
     <!-- Custom dashboard script -->
-    <script src="../js/dashboard-1.js"></script>
+    <script src="{{ URL::asset('js/dashboard-1.js') }}"></script>
+
 
 
     <!-- Common JS -->
     <!-- <script src="../../assets/plugins/common/common.min.js"></script> -->
     <!-- Custom script -->
     <!-- <script src="../js/custom.min.js"></script> -->
-    <script src="../../assets/plugins/tables/js/jquery.dataTables.min.js"></script>
-    <script src="../../assets/plugins/tables/js/datatable/dataTables.bootstrap4.min.js"></script>
-    <script src="../../assets/plugins/tables/js/datatable-init/datatable-basic.min.js"></script>
+    <script src="{{ URL::asset('assets/plugins/tables/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/tables/js/datatable/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/tables/js/datatable-init/datatable-basic.min.js') }}"></script>
 </body>
 
 </html>

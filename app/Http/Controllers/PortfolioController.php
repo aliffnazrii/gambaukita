@@ -16,7 +16,7 @@ class PortfolioController extends Controller
 
     public function __construct(){
         $this->middleware(CheckUserRole::class)->only(['ownerPortfolio','destroy','create','update','edit','store']);
-        $this->middleware(ClientMiddleware::class);
+        // $this->middleware(ClientMiddleware::class);
     }
     // Display a listing of the portfolios
     public function index()

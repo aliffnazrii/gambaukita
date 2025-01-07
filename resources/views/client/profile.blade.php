@@ -232,7 +232,8 @@
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item"><strong>Email:</strong> {{ $user->email }}</li>
                             <li class="list-group-item"><strong>Phone Number:</strong> {{ $user->phone }}</li>
-                            <li class="list-group-item"><strong>Address:</strong> {{ $user->address }} {{ $user->postcode }} {{ $user->city }} {{ $user->state }}</li>
+                            <li class="list-group-item"><strong>Address:</strong> {{ $user->address }}
+                                {{ $user->postcode }} {{ $user->city }} {{ $user->state }}</li>
                         </ul>
                     </div>
                 </div>
@@ -244,8 +245,14 @@
                     </div>
                     <div class="card-body">
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item"><strong>{{ 'Package'}} :</strong> {{  'TARIKH'}} - {{  'AMOUNT'}}</li>
-                           
+                            @if (count($bookings) > 0)
+                                @foreach ($bookings as $booking)
+                                    <li class="list-group-item"><strong>{{ $booking->package->name }} :</strong>
+                                        {{ $booking->event_date }} - {{ $booking->total_price }}</li>
+                                @endforeach
+                            @else
+                                <li class="list-group-item">No bookings made.</li>
+                            @endif
                         </ul>
                     </div>
                 </div>
@@ -267,7 +274,8 @@
                 </div>
                 <div class="modal-body">
                     <!-- Edit Profile Form -->
-                    <form id="editProfileForm" method="post" action="{{ route('users.update', Auth::user()->id) }}">
+                    <form id="editProfileForm" method="post"
+                        action="{{ route('users.update', Auth::user()->id) }}">
                         @csrf
                         @method('PUT')
                         <div class="form-group">

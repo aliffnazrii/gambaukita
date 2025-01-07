@@ -133,36 +133,7 @@
             </div>
         </div>
 
-        <!-- Gallery Section -->
-        <div class="row">
-            <div class="col-md-12 mb-4">
-                <div class="card border">
-                    <div class="card-body border">
-                        <h4 class="card-title">Our Gallery</h4>
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <!-- Image 1 -->
-                                    <div class="col-md-4 mb-4">
-                                        <img src="https://via.placeholder.com/300" alt="Gallery Image 1" class="img-fluid">
-                                    </div>
-                                    <!-- Image 2 -->
-                                    <div class="col-md-4 mb-4">
-                                        <img src="https://via.placeholder.com/300" alt="Gallery Image 2" class="img-fluid">
-                                    </div>
-                                    <!-- Image 3 -->
-                                    <div class="col-md-4 mb-4">
-                                        <img src="https://via.placeholder.com/300" alt="Gallery Image 3" class="img-fluid">
-                                    </div>
-                                    <!-- Add more images here -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+       
     </div>
 
 </div>

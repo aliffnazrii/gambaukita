@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
             'email' => 'aliff.nazri9@gmail.com',
             'password' => Hash::make('aliffnazrii'), // Make sure to hash the password
             'phone' => '0189839423',
-            'role' => 'owner',
+            'role' => 'Owner',
             'address' => '123 Default St',
             'postcode' => '12345',
             'city' => 'Default City',

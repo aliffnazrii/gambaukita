@@ -19,6 +19,7 @@ return new class extends Migration
             $table->enum('status',(['Pending', 'Completed','Cancelled']))->default('Pending'); // e.g., "pending", "completed"
             $table->string('transaction_id')->nullable(); // Stripe transaction ID or payment intent ID
             $table->string('payment_method')->nullable(); // e.g., "card", "fpx"
+            $table->timestamp('expires_at')->nullable(); // Optional: expiry for pending payments
             $table->timestamps();
 
             // Foreign key constraint

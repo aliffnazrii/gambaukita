@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\CheckUserRole;
 use App\Http\Middleware\ClientMiddleware;
 
+use App\Models\Package;
+use App\Models\PackageImage;
+
 
 Auth::routes();
 
@@ -34,11 +37,16 @@ Route::resource('users', UserController::class);
 // CUSTOM CLIENT ROUTE
 
 Route::get('/', function () {
-    return view('client.home');
+
+    $packs = Package::with('images')->where('status', 'Active')->get();
+    return view('client.home', compact('packs'));
+    // return view('client.home');
 });
 Route::get('/about', function () {
     return view('client.about');
 });
+
+Route::get('/packages/view/{id}',[PackageController::class, 'viewPackage'])->name('packages.view');
 
 
 
