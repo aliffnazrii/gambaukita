@@ -14,15 +14,14 @@ use Illuminate\Database\Eloquent\Builder;
 class PackageController extends Controller
 {
 
-    public function __construct(){
-        $this->middleware(CheckUserRole::class)->only(['store','create','update','edit','destroy']);
+    public function __construct()
+    {
+        $this->middleware(CheckUserRole::class)->only(['store', 'create', 'update', 'edit', 'destroy']);
     }
     // Display a listing of the packages
     public function index()
     {
-        $packages = Package::with(['images' => function ($query) {
-            $query->limit(1);  // Get only the first image
-        }])->get();
+        $packages = Package::with('images')->get();
         return view('client.catalogue', compact('packages'));
     }
 
@@ -39,6 +38,7 @@ class PackageController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
+            'features' => 'required|string',
             'price' => 'required|numeric',
             'duration' => 'required|integer',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -48,6 +48,7 @@ class PackageController extends Controller
         $package = Package::create([
             'name' => $request->name,
             'description' => $request->description,
+            'features' => $request->features,
             'price' => $request->price,
             'duration' => $request->duration,
         ]);
@@ -119,6 +120,7 @@ class PackageController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'features' => 'nullable|string',
             'price' => 'required|numeric',
             'duration' => 'required|integer',
             'status' => 'required|string'
@@ -136,8 +138,7 @@ class PackageController extends Controller
 
                     // Create an entry in the package_images table
                     $update = PackageImage::findOrFail($id);
-                    $update->update( ['image_url' => Storage::url($path)]);
-                   
+                    $update->update(['image_url' => Storage::url($path)]);
                 } else {
                     return redirect()->back()->withErrors(['images' => 'One or more images failed to upload.']);
                 }
@@ -176,10 +177,12 @@ class PackageController extends Controller
         $package = Package::where('id', $id)->with('images')->first();
         return view('owner.open-package', compact('package'));
     }
-    
-    
-    public function viewPackage($id){
+
+    #CLIENT
+
+    public function viewPackage($id)
+    {
         $package = Package::with('images')->findOrFail($id);
-    return view('client.viewPackage',compact('package'));
+        return view('client.viewPackage', compact('package'));
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PackageImage;
 use App\Models\Package;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PackageImageController extends Controller
 {
@@ -25,15 +26,30 @@ class PackageImageController extends Controller
     // Store a newly created package image in the database
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif',
             'package_id' => 'required|exists:packages,id',
-            'image_url' => 'required|url',
         ]);
 
-        PackageImage::create($validatedData);
+        // Handle the image file upload
+        if ($request->hasFile('image')) {
+            // Store the image in the 'public' disk
+            $image = $request->file('image');
+            $imagePath = $image->store('package_images', 'public');  // Store the file in 'public/images'
+            $imagePath = '/' . 'storage/' . $imagePath;
 
-        return redirect()->route('package_images.index')->with('success', 'Package image created successfully.');
+            // Save the image path to the database (you can use your model to save it)
+            $packageImage = new PackageImage();
+            $packageImage->package_id = $request->package_id;
+            $packageImage->image_url = $imagePath;  // Store the relative file path
+            $packageImage->save();
+
+            return redirect()->back()->with('success', 'Image uploaded successfully!');
+        }
+
+        return redirect()->back()->with('failed', 'Image not uploaded');
     }
+
 
     // Display the specified package image
     public function show($id)
@@ -42,34 +58,37 @@ class PackageImageController extends Controller
         return view('package_images.show', compact('image'));
     }
 
-    // Show the form for editing the specified package image
-    public function edit($id)
-    {
-        $image = PackageImage::findOrFail($id);
-        $packages = Package::all();
-        return view('package_images.edit', compact('image', 'packages'));
-    }
 
-    // Update the specified package image in the database
-    public function update(Request $request, $id)
-    {
-        $validatedData = $request->validate([
-            'package_id' => 'required|exists:packages,id',
-            'image_url' => 'required|url',
-        ]);
 
-        $image = PackageImage::findOrFail($id);
-        $image->update($validatedData);
-
-        return redirect()->route('package_images.index')->with('success', 'Package image updated successfully.');
-    }
 
     // Remove the specified package image from the database
     public function destroy($id)
     {
+        // Retrieve the image record
         $image = PackageImage::findOrFail($id);
-        $image->delete();
 
-        return redirect()->route('package_images.index')->with('success', 'Package image deleted successfully.');
+        // Get the package ID related to the image
+        $packageId = $image->package_id;
+
+        // Retrieve the package and eager load the 'images' relation (optional)
+        $package = Package::with('images')->findOrFail($packageId);
+
+        // Extract the image path (adjust this based on how you store images)
+        $oldImagePath = str_replace('/' . 'storage/', '', $image->image_url);
+
+        // Check if the image file exists in the public storage
+        if (Storage::disk('public')->exists($oldImagePath) && $package->images->count() > 1) {
+            // Delete the old image file
+            Storage::disk('public')->delete($oldImagePath);
+
+            // Delete the image record from the database
+            $image->delete();
+
+            // Redirect back with a success message
+            return redirect()->back()->with('success', 'Image deleted successfully.');
+        } else {
+            // If the image file doesn't exist, return with a failure message
+            return redirect()->back()->with('failed', 'Deletion failed. Cannot delete single image.');
+        }
     }
 }

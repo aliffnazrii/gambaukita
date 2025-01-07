@@ -6,7 +6,66 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 
+    <style>
+        .custom-textarea {
+            height: 150px;
+            /* You can adjust the height to any value you prefer */
+        }
 
+        .card {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h3 {
+            font-size: 20px;
+            color: #434343;
+            margin-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+        }
+
+
+
+        .table {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .table th,
+        .table td {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .table th {
+            background-color: #f6f6f6;
+        }
+    </style>
 
     <!-- Main Content -->
     <div class="container mt-4">
@@ -27,18 +86,23 @@
 
                 <form action="{{ route('packages.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
-                   
+
                     <div class="mb-3">
                         <label for="packageName" class="form-label">Package Name</label>
                         <input type="text" id="packageName" name="name" class="form-control" required>
                     </div>
                     <div class="mb-3">
                         <label for="packageDescription" class="form-label">Description</label>
-                        <textarea id="packageDescription" name="description" class="form-control" rows="5" required></textarea>
+                        <textarea id="packageDescription" name="description" class="form-control custom-textarea" rows="5" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="Features" class="form-label">Features</label>
+                        <textarea id="features" name="features" class="form-control custom-textarea" rows="5" required></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="packagePrice" class="form-label">Price</label>
-                        <input type="number" id="packagePrice" name="price" class="form-control" required>
+                        <input type="number" id="packagePrice" name="price" class="form-control "
+                            required>
                     </div>
                     <div class="mb-3">
                         <label for="packageDuration" class="form-label">Duration (Days)</label>
@@ -107,7 +171,8 @@
                                 <td>{{ $package->duration }}</td>
                                 <td>RM {{ $package->price }}</td>
                                 <td>
-                                    <a href="{{ route('package.view', $package->id) }}" class="btn btn-warning col-12">Edit</a>
+                                    <a href="{{ route('package.view', $package->id) }}"
+                                        class="btn btn-warning col-12">Edit</a>
                                     {{-- <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
                                         data-target="#basicModal{{ $package->id }}">Deactivate</button> --}}
                                 </td>

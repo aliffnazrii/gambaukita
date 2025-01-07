@@ -8,6 +8,8 @@
 
 @section('content')
 
+   
+
     <div class="card card-body">
         <div class="container-fluid">
             <!-- Banner Section -->
@@ -97,9 +99,9 @@
 
                         @foreach ($packs as $package)
                             <div class="col-lg-4 col-md-6 mb-4">
-                                <div class="card h-100">
+                                <div class="card h-100 border">
                                     <!-- Bootstrap Carousel -->
-                                    <div id="carousel-{{ $package->id }}" class="carousel slide" data-bs-ride="carousel">
+                                    <div id="carousel-{{ $package->id }}" class="carousel slide" data-ride="carousel">
                                         <div class="carousel-inner">
                                             @foreach ($package->images as $key => $image)
                                                 <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
@@ -108,20 +110,19 @@
                                                         alt="Package Image">
                                                 </div>
                                             @endforeach
-
                                         </div>
 
-                                        @if ($package->images->count() > 1)
+                                        @if (count($package->images) > 1)
                                             <!-- Controls for Carousel -->
                                             <a class="carousel-control-prev" href="#carousel-{{ $package->id }}"
-                                                role="button" data-bs-slide="prev">
+                                                role="button" data-slide="prev">
                                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                                <span class="visually-hidden">Previous</span>
+                                                <span class="sr-only">Previous</span>
                                             </a>
                                             <a class="carousel-control-next" href="#carousel-{{ $package->id }}"
-                                                role="button" data-bs-slide="next">
+                                                role="button" data-slide="next">
                                                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                                <span class="visually-hidden">Next</span>
+                                                <span class="sr-only">Next</span>
                                             </a>
                                         @endif
                                     </div>
@@ -129,20 +130,26 @@
 
                                     <div class="card-body">
                                         <h4 class="card-title text-center">{{ $package->name }}</h4>
-                                        <p class="card-text">{{ $package->description }}</p>
-                                        <ul>
-                                            {{ $package->features }}
+                                        <p class="card-text text-center">{{ $package->description }}</p>
+                                        <ul class="text-center">
+                                            @foreach (explode("\n", $package->features) as $index => $feature)
+                                                <li>{{ $feature }}</li>
+                                            @endforeach
                                         </ul>
+
                                         <div class="text-center">
                                             <h5>RM {{ $package->price }}</h5>
                                         </div>
                                     </div>
                                     <div class="card-footer text-center">
-                                        <a href="{{ route('bookings.index') }}" class="btn btn-primary">Book Now</a>
+                                        <a href="{{ route('bookings.index') }}" class="btn btn-primary">Book</a>
+                                        <a href="{{ route('packages.view', $package->id) }}"
+                                            class="btn btn-primary">View</a>
                                     </div>
                                 </div>
                             </div>
                         @endforeach
+
 
 
                     </div>

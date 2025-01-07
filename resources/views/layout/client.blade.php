@@ -31,7 +31,7 @@
         <div class="nav-header">
             <div class="brand-logo"><a href="/main-home"><b><img src="{{ URL::asset('assets/images/logo.png') }}"
                             alt="">
-                    </b><span class="brand-title">GambauKita.my</span></a>
+                    </b><span class="brand-title">GambauKita.com</span></a>
             </div>
             <div class="nav-control">
                 <div class="hamburger"><span class="line"></span> <span class="line"></span> <span

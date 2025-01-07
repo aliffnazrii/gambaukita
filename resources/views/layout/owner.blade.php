@@ -31,8 +31,8 @@
         <!-- header -->
         <div class="header" style="z-index:10;">
             <div class="nav-header">
-                <div class="brand-logo"><a href="/main-home"><b><img src="../../assets/images/logo.png" alt="">
-                        </b><span class="brand-title">GKitaAdmin</span></a>
+                <div class="brand-logo"><a href="/main-home"><b><img src="{{ URL::asset('assets/images/logo.png') }}" alt="">
+                        </b><span class="brand-title">GKAdmin</span></a>
                 </div>
                 <div class="nav-control">
                     <div class="hamburger"><span class="line"></span> <span class="line"></span> <span
@@ -249,9 +249,24 @@
             </div>
             <!-- #/ nk nav scroll -->
         </div>
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        @if (session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
+        @if (session('failed'))
+            <div class="alert alert-danger">{{ session('failed') }}</div>
+        @endif
         <!-- #/ sidebar -->
         <!-- content body -->
-        <div class="content-body">
+        <div class="content-body my-3">
             @yield('content')
         </div>
         <!-- #/ content body -->

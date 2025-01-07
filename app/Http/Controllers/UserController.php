@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -112,7 +113,22 @@ class UserController extends Controller
     public function dashboard()
     {
         $user = AUTH::user();
-        return view('owner.dashboard', compact('user'));
+        $clients = User::where('role', 'Client')->get();
+        $packages = Package::all();
+        $bookings = Booking::all();
+
+
+        $startOfMonth = Carbon::now()->startOfMonth();  // Start of the current month
+        $endOfMonth = Carbon::now()->endOfMonth();      // End of the current month
+
+        $monthlyEarnings = Booking::where('progress_status', 'Completed')
+            ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+            ->sum('total_price');
+        $totalEarnings = Booking::where('progress_status', 'Completed')
+            ->sum('total_price');
+
+
+        return view('owner.dashboard', compact('user', 'clients', 'bookings', 'packages', 'monthlyEarnings', 'totalEarnings'));
     }
 
     public function ownerProfile()

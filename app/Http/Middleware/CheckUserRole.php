@@ -21,7 +21,7 @@ class CheckUserRole
             return redirect('login');
         }
 
-        $role = 'owner';
+        $role = 'Owner';
         // Check if the user has the required role
         if (Auth::user()->role != $role) {
             return redirect('/'); // Redirect to unauthorized page
