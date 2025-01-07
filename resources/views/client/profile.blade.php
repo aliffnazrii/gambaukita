@@ -169,7 +169,7 @@
                                                 viewMode: 1,
                                                 autoCropArea: 3,
                                                 // Optional: Set the initial crop box size
-                                                width: 400, // Adjust this width as desired
+                                                width: 700, // Adjust this width as desired
                                                 height: 300 // Adjust this height as desired
                                             });
                                         };
