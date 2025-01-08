@@ -107,7 +107,7 @@
 
                         </div>
 
-                        <form id="hiddenProfileForm" method="POST" action="/users/update-picture/{{ $user->id }}"
+                        <form id="hiddenProfileForm" method="POST" action="{{ route('update.picture',$user->id) }}"
                             enctype="multipart/form-data" style="display: none;">
                             @csrf
                             @method('PUT')

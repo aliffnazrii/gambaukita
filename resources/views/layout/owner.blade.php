@@ -240,7 +240,7 @@
                         <a class="nav-link" aria-current="page" href="{{ route('owner.portfolio') }}">Portfolios</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{{ route('owner.profile') }}">Account</a>
+                        <a class="nav-link" aria-current="page" href="{{ route('owner.profile') }}">Profile</a>
                     </li>
 
 

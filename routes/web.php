@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\CheckUserRole;
 use App\Http\Middleware\ClientMiddleware;
 
-use App\Models\Package;
+use App\Models\Package; 
 use App\Models\PackageImage;
 
 
@@ -45,6 +45,7 @@ Route::get('/', function () {
 Route::get('/about', function () {
     return view('client.about');
 });
+Route::put('/client/updatePassword/{user}', [UserController::class, 'updatePassword'])->name('client.updatePassword')->middleware('clientLogin');
 
 Route::get('/packages/view/{id}',[PackageController::class, 'viewPackage'])->name('packages.view');
 
@@ -52,7 +53,7 @@ Route::get('/packages/view/{id}',[PackageController::class, 'viewPackage'])->nam
 
 
 #UPDATE PROFILE PICTURE
-Route::put('/users/update-picture/{id}', [UserController::class, 'updateProfilePicture'])->middleware('clientLogin');
+Route::put('/users/update-picture/{id}', [UserController::class, 'updateProfilePicture'])->name('update.picture')->middleware('clientLogin');
 
 
 Route::post('/checkdate', [BookingController::class, 'checkdate'])->name('booking.checkdate')->middleware('clientLogin');
@@ -74,6 +75,8 @@ Route::get('/owner/dashboard', [UserController::class, 'dashboard'])->name('owne
 Route::get('/owner/profile', [UserController::class, 'ownerProfile'])->name('owner.profile')->middleware('ownerLogin');
 Route::get('/owner/schedule', [ScheduleController::class, 'ownerSchedule'])->name('owner.schedule')->middleware('ownerLogin');
 Route::get('/owner/events', [ScheduleController::class, 'getEvents'])->name('owner.getEvents')->middleware('ownerLogin');
+Route::put('/owner/updateProfile/{user}', [UserController::class, 'updateOwner'])->name('owner.update')->middleware('ownerLogin');
+Route::put('/owner/updatePassword/{user}', [UserController::class, 'updatePassword'])->name('owner.updatePassword')->middleware('ownerLogin');
 
 Route::post('/upload-package', [PackageController::class, 'uploadPackageImage'])->name('packages.uploadImage')->middleware('ownerLogin');
 

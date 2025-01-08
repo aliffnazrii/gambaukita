@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -72,6 +74,44 @@ class UserController extends Controller
         $user->update($reqval);
 
         return view('client.profile', compact('user'))->with('success', 'User updated successfully.');
+    }
+
+
+    public function updateOwner(Request $request, User $user)
+    {
+        $reqval = $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'nullable|string|regex:/^[0-9]{10,15}$/',
+            'address' => 'nullable|string|max:500',
+            'postcode' => 'nullable|string|regex:/^[0-9]{5}$/',
+            'city' => 'nullable|string|max:100',
+            'state' => 'nullable|string|max:100',
+        ]);
+
+        $user->update($reqval);
+
+        return redirect()->route('owner.profile', compact('user'))->with('success', 'User updated successfully.');
+    }
+
+    public function updatePassword(Request $request, User $user)
+    {
+        $request->validate([
+            'old_password' => ['required', 'string'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'], // password_confirmation will auto match with the input field 'password_confirmation'
+        ]);
+
+        // Check if the old password matches
+        if (!Hash::check($request->old_password, $user->password)) {
+            throw ValidationException::withMessages([
+                'old_password' => ['The provided password does not match our records.'],
+            ]);
+        }
+
+        // Update the password
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        return redirect()->route('owner.profile')->with('success', 'Password updated successfully.');
     }
 
     public function updateProfilePicture(Request $request, $id)
