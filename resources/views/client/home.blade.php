@@ -1,7 +1,7 @@
 @extends('layout.client')
 
 
-@section('title', 'Gambaukita.my')
+@section('title', 'Gambaukita.com')
 
 
 

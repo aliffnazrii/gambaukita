@@ -32,9 +32,9 @@ class LoginController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->role === 'owner') {
+        if ($user->role === 'Owner') {
             return '/owner/dashboard'; // Owner's page
-        } elseif ($user->role === 'client') {
+        } elseif ($user->role === 'Client') {
             return '/home'; // Client's home page
         }
 
