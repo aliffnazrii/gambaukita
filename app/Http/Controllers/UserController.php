@@ -161,10 +161,14 @@ class UserController extends Controller
         $startOfMonth = Carbon::now()->startOfMonth();  // Start of the current month
         $endOfMonth = Carbon::now()->endOfMonth();      // End of the current month
 
-        $monthlyEarnings = Booking::where('progress_status', 'Completed')
+        $monthlyEarnings = Booking::with('payments')->whereHas('payments', function ($query) {
+            $query->where('status', 'Completed');
+        })
             ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
             ->sum('total_price');
-        $totalEarnings = Booking::where('progress_status', 'Completed')
+        $totalEarnings = Booking::with('payments')->whereHas('payments', function ($query) {
+            $query->where('status', 'Completed');
+        })
             ->sum('total_price');
 
 
@@ -175,5 +179,10 @@ class UserController extends Controller
     {
         $user = AUTH::user();
         return view('owner.owner-profile', compact('user'));
+    }
+
+    public function viewClients(){
+        $users = User::where('role', 'Client')->get();
+        return view('owner.clients', compact('users'));
     }
 }

@@ -75,8 +75,13 @@
 
                 <div class="text-center mt-4">
                     <button class="btn btn-primary" onclick="window.print()">Print Invoice</button>
-                    <a href="{{ route('bookings.show', $booking->id) }}" class="btn btn-secondary">Back to Booking
-                        Details</a>
+                    @if (Auth::user()->role == 'Owner')
+                        <a href="{{ route('bookings.edit', $booking->id) }}" class="btn btn-secondary">Back to Booking
+                            Details</a>
+                    @else
+                        <a href="{{ route('bookings.show', $booking->id) }}" class="btn btn-secondary">Back to Booking
+                            Details</a>
+                    @endif
                 </div>
             </div>
         </div>

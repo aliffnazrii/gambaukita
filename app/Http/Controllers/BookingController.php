@@ -224,23 +224,25 @@ class BookingController extends Controller
     // Update the specified booking in the database
     public function update(Request $request, $id)
     {
+
         $validatedData = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'package_id' => 'required|exists:packages,id',
-            'venue' => 'required|string|max:255',
-            'event_date' => 'required|date',
-            'event_time' => 'required|date_format:H:i',
-            'remark' => 'nullable|string|max:255',
-            'acceptance_status' => 'required|string|max:50',
-            'progress_status' => 'required|string|max:50',
-            'booking_status' => 'required|string|max:50',
-            'total_price' => 'required|numeric',
+            'progress_status' => 'required|in:Pending,Booked,Waiting,Completed,Cancelled', // Only allow specific statuses
+            // 'link' => $request->progress_status === 'Completed' ? 'required|url' : 'nullable', // Conditionally required for 'Completed'
         ]);
 
+        // Find the booking by ID
         $booking = Booking::findOrFail($id);
+
+        // Update the booking with validated data
         $booking->update($validatedData);
 
-        return redirect()->route('bookings.index')->with('success', 'Booking updated successfully.');
+        // $booking = ([
+        //     'progress_status' => 'Completed',
+        // ]);
+
+
+
+        return redirect()->back()->with('success', 'Booking updated successfully.');
     }
 
     // Remove the specified booking from the database

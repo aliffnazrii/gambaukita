@@ -231,6 +231,9 @@
                         <a class="nav-link" aria-current="page" href="{{ route('owner.booking') }}">Bookings</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{ route('owner.viewClients') }}">Clients</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="{{ route('owner.package') }}">Packages</a>
                     </li>
                     <li class="nav-item">

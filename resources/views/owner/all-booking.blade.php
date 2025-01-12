@@ -52,17 +52,7 @@
 
 
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <th class="py-2 px-4 border-b border-gray-300 text-left text-gray-700">No</th>
-                            <th class="py-2 px-4 border-b border-gray-300 text-left text-gray-700">Package</th>
-                            <th class="py-2 px-4 border-b border-gray-300 text-left text-gray-700">Venue</th>
-                            <th class="py-2 px-4 border-b border-gray-300 text-left text-gray-700">Event Date</th>
-                            <th class="py-2 px-4 border-b border-gray-300 text-left text-gray-700">Event Time</th>
-                            <th class="py-2 px-4 border-b border-gray-300 text-left text-gray-700">Total Price</th>
-                            <th class="py-2 px-4 border-b border-gray-300 text-left text-gray-700">Action</th>
-                        </tr>
-                    </tfoot>
+                   
                 </table>
             </div>
         </div>

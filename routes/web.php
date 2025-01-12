@@ -96,6 +96,8 @@ Route::get('/owner/bookings', [BookingController::class, 'ownerindex'])->name('o
 Route::get('/owner/packages', [PackageController::class, 'ownerPackage'])->name('owner.package')->middleware('ownerLogin');
 Route::get('/owner/packages/open/{id}', [PackageController::class, 'ownerPackageView'])->name('package.view')->middleware('ownerLogin');
 
+#view clients route
+Route::get('owner/view-clients', [UserController::class, 'viewClients'])->name('owner.viewClients')->middleware('ownerLogin');
 
 
 #EXPERIMENT ROUTE

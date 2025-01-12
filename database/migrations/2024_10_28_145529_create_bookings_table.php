@@ -23,6 +23,7 @@ return new class extends Migration
             $table->enum('progress_status', ['Pending','Booked', 'Waiting', 'Completed', 'Cancelled'])->nullable()->default('Pending'); // Add appropriate options
             $table->integer('deposit_percentage');
             $table->decimal('total_price', 10, 2);
+            $table->string('link')->nullable();
             $table->timestamps();
             
             
