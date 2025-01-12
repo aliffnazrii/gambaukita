@@ -61,6 +61,8 @@ Route::get('/invoice/{id}', [BookingController::class, 'showInvoice'])->name('bo
 
 #PAYMENT GATEWAYY
 Route::get('/payment-success/{bookingId}', [BookingController::class, 'paymentSuccess'])->name('payment.success')->middleware('clientLogin');
+
+
 Route::get('/booking/{booking_id}/payment', [PaymentController::class, 'processBookingPayment'])->name('booking.payment')->middleware('clientLogin');
 
 

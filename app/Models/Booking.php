@@ -20,6 +20,7 @@ class Booking extends Model
         'progress_status',
         'deposit_percentage',
         'total_price',
+        'link',
     ];
 
     // Relationship with User 

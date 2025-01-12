@@ -2,6 +2,8 @@
 
 @extends('layout.client')
 
+@section('title', 'Payment Success')
+
 @section('content')
     <div class="container mb-5">
         <div class="card col-md-12 p-5 m-5 m-auto">
@@ -9,8 +11,9 @@
                 <h5 class="card-title">Booking Information</h5>
                 <div class="row">
                     <div class="col-md-6">
-                        <p><strong>Booking ID:</strong> {{ $booking->id }}</p>
-                        <p><strong>Status:</strong> <span class="badge badge-success">{{ ucfirst($booking->status) }}</span>
+
+                        <p><strong>Status:</strong> <span
+                                class="badge badge-success">{{ ucfirst($booking->acceptance_status) }}</span>
                         </p>
                     </div>
                     <div class="col-md-6 text-md-right">
@@ -33,48 +36,48 @@
                         </tr>
                         <tr>
                             <td><strong>Deposit Paid:</strong></td>
-                            <td class="text-right">{{ number_format($booking->deposit_amount, 2) }}</td>
+                            <td class="text-right">{{ number_format($booking->payments->latest()->amount, 2)}}</td>
                         </tr>
                         <tr>
                             <td><strong>Remaining Balance:</strong></td>
-                            <td class="text-right">{{ number_format($booking->total_price - $booking->deposit_amount, 2) }}
+                            <td class="text-right">{{ number_format($booking->total_price - $booking->payments->latest()->amount, 2) }}
                             </td>
                         </tr>
                     </tbody>
                 </table>
 
-                <h5 class="mt-4">Customer Details</h5>
-                <table class="table table-striped">
+                <h5 class="mt-5">Customer Details</h5>
+                <table class="table table-striped border">
                     <tbody>
                         <tr>
                             <td><strong>Name:</strong></td>
-                            <td>{{ $booking->customer_name }}</td>
+                            <td>{{ $booking->user->name }}</td>
                         </tr>
                         <tr>
                             <td><strong>Email:</strong></td>
-                            <td>{{ $booking->customer_email }}</td>
+                            <td>{{ $booking->user->email }}</td>
                         </tr>
                         <tr>
                             <td><strong>Phone:</strong></td>
-                            <td>{{ $booking->customer_phone }}</td>
+                            <td>{{ $booking->user->phone }}</td>
                         </tr>
                     </tbody>
                 </table>
 
-                <h5 class="mt-4">Booking Details</h5>
-                <table class="table table-hover">
+                <h5 class="mt-5">Booking Details</h5>
+                <table class="table table-hover border">
                     <tbody>
                         <tr>
-                            <td><strong>Check-in Date:</strong></td>
-                            <td>{{ \Carbon\Carbon::parse($booking->check_in_date)->format('d M Y') }}</td>
+                            <td><strong>Event Date:</strong></td>
+                            <td>{{ \Carbon\Carbon::parse($booking->event_date)->format('d M Y') }}</td>
                         </tr>
                         <tr>
-                            <td><strong>Check-out Date:</strong></td>
-                            <td>{{ \Carbon\Carbon::parse($booking->check_out_date)->format('d M Y') }}</td>
+                            <td><strong>Time :</strong></td>
+                            <td>{{ $booking->event_time }}</td>
                         </tr>
                         <tr>
-                            <td><strong>Number of Guests:</strong></td>
-                            <td>{{ $booking->number_of_guests }}</td>
+                            <td><strong>Location :</strong></td>
+                            <td>{{ $booking->venue }}</td>
                         </tr>
                     </tbody>
                 </table>

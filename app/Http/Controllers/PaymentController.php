@@ -17,10 +17,13 @@ class PaymentController extends Controller
     {
         $booking = Booking::findOrFail($booking_id);
         // $depositAmount = $booking->invoices->first()->deposit_amount;
-        $depositAmount = Invoice::where('booking_id', $booking->id)->value('total_amount');
+        $depositAmount = Invoice::where('booking_id', $booking->id)
+            ->latest('created_at') // Sort by the `created_at` column in descending order
+            ->value('total_amount');
 
 
-        $depositAmount =  $depositAmount * 100;
+
+        $depositAmount = $depositAmount * 100;
 
         // Initialize Stripe with your secret key
         Stripe::setApiKey(config('services.stripe.secret'));
@@ -35,10 +38,12 @@ class PaymentController extends Controller
             ],
         ]);
 
+
         return view('payment.payment', [
             'clientSecret' => $paymentIntent->client_secret,
             'bookingId' => $booking->id,
             'depositAmount' => $depositAmount,
         ]);
     }
+
 }

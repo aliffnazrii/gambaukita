@@ -49,8 +49,7 @@
                                             <td class="py-2 px-4 border-b border-gray-300">
                                                 <a href="{{ route('bookings.show', $booking->id) }}"
                                                     class="view-btn btn btn-primary">View</a>
-                                                {{-- <button class="view-btn btn btn-primary" data-toggle="modal"
-                                                data-target="#modalJohnDoe">View</button> --}}
+
                                             </td>
                                         </tr>
                                     @endif

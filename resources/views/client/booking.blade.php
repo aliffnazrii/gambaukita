@@ -193,13 +193,24 @@
 
                                             // Create the events array directly in JavaScript
                                             var events = [
+
                                                 @foreach ($schedules as $schedule)
                                                     {
-                                                        title: "{{ $schedule->title }}",
+                                                        title: "{{ 'Booked' }}",
                                                         start: "{{ $schedule->start }}T{{ $schedule->time }}", // Combine date and time for the start field
                                                         end: "{{ $schedule->end }}T{{ $schedule->time }}", // Combine date and time for the end field
                                                     },
                                                 @endforeach
+
+
+                                                @foreach ($bookings as $schedule)
+                                                    {
+                                                        title: "{{ 'Booked' }}",
+                                                        start: "{{ $schedule->event_date }}T{{ $schedule->event_time }}", // Combine date and time for the start field
+                                                        end: "{{ $schedule->event_date }}T{{ $schedule->event_time }}",
+                                                    },
+                                                @endforeach
+
                                             ];
 
                                             var calendar = new FullCalendar.Calendar(calendarEl, {

@@ -27,7 +27,8 @@ class BookingController extends Controller
     {
         $packages = Package::all();
         $schedules = Schedule::all();
-        return view('client.booking', compact('packages', 'schedules'));
+        $bookings = Booking::all();
+        return view('client.booking', compact('packages', 'schedules', 'bookings'));
     }
 
     public function checkdate(Request $req)
@@ -51,6 +52,23 @@ class BookingController extends Controller
         }
     }
 
+    public function Datecheck($date)
+    {
+        $bookingDate = $date;
+
+        // Check if the selected date exists in the Offday table
+        $Schedule = Schedule::where('start', $bookingDate)->first();
+        $otherBookings = Booking::where('event_date', $bookingDate)->first();
+
+        if ($Schedule || $otherBookings) {
+            // If the date is found in the Offday table, return an error response
+            return false;
+        } else {
+
+            return true;
+        }
+    }
+
 
 
     // Store a newly created booking in the database
@@ -60,7 +78,7 @@ class BookingController extends Controller
             'user_id' => 'required|exists:users,id',
             'package_id' => 'required|exists:packages,id',
             'venue' => 'required|string|max:255',
-            'event_date' => 'required|date',
+            'event_date' => 'required|date|after:today',
             'event_time' => 'required|date_format:H:i',
             'remark' => 'nullable|string|max:255',
             'acceptance_status' => 'required|string|max:50',
@@ -70,52 +88,109 @@ class BookingController extends Controller
         ]);
         $packageId = $validatedData['package_id'];
         $price = Package::where('id', $packageId)->value('price');
-        $validatedData['total_price'] =  $price;
+        $validatedData['total_price'] = $price;
         //    'total_price' => 'required|numeric',
 
+        $checkDate = $this->Datecheck($validatedData['event_date']);
 
-        $booking = Booking::create($validatedData);
-        $depositAmount = $price * ($validatedData['deposit_percentage'] / 100);
 
-        $invoice = Invoice::create([
-            'booking_id' => $booking->id,
-            'invoice_number' => 'INV-' . time() . '-' . $booking->id, // Generate a unique invoice number
-            'invoice_date' => now(),
-            'total_amount' => $depositAmount,
-            'status' => 'unpaid',
-        ]);
+        if ($checkDate) {
 
-        return redirect()->route('booking.payment', ['booking_id' => $booking->id]);
-        // return redirect()->route('bookings.index')->with('success', 'Booking created successfully.');
+
+            $booking = Booking::create($validatedData);
+            $depositAmount = $price * ($validatedData['deposit_percentage'] / 100);
+
+            $invoice = Invoice::create([
+                'booking_id' => $booking->id,
+                'invoice_number' => 'INV-' . time() . '-' . $booking->id, // Generate a unique invoice number
+                'invoice_date' => now(),
+                'total_amount' => $depositAmount,
+                'status' => 'Unpaid',
+            ]);
+
+            return redirect()->route('booking.payment', ['booking_id' => $booking->id]);
+            // return redirect()->route('bookings.index')->with('success', 'Booking created successfully.');
+        } else {
+            return redirect()->back()->withErrors(['checkdate_input' => 'The selected date is unavailable or overlap. Please choose a different date.']);
+        }
+
+        return redirect()->back()->withErrors($checkDate)->withInput();
     }
 
 
     public function paymentSuccess($bookingId)
     {
-        // Retrieve booking and related invoice
+        // Retrieve booking and related invoices
         $booking = Booking::findOrFail($bookingId);
-        $invoice = Invoice::where('booking_id', $bookingId)->firstOrFail();
+        $invoices = Invoice::where('booking_id', $bookingId)->get();
 
-        // Update invoice status to "paid"
-        $invoice->status = 'paid';
-        $invoice->save();
+        // Single invoice logic
+        if (count($invoices) == 1) {
+            foreach ($invoices as $invoice) {
+                if ($invoice->status == 'Unpaid') {
+                    $invoice->status = 'Paid';
+                    $invoice->save();
 
-        // Create a payment record for this transaction
-        Payment::create([
-            'booking_id' => $booking->id,
-            'type' => 'deposit',
-            'amount' => $invoice->total_amount,
-            'status' => 'completed',
-            'transaction_id' => request('payment_intent'), // Optionally store the Stripe payment intent ID
-            'payment_method' => 'fpx', // Or 'card' based on method used
-        ]);
+                    // Create a payment record for this transaction
+                    $payments = Payment::create([
+                        'booking_id' => $booking->id,
+                        'type' => 'deposit',
+                        'amount' => $invoice->total_amount,
+                        'status' => 'Completed',
+                        'transaction_id' => request('payment_intent'), // Optionally store the Stripe payment intent ID
+                        'payment_method' => 'fpx', // Or 'card' based on method used
+                    ]);
 
-        // Update booking status to confirmed
-        $booking->acceptance_status = 'confirmed';
-        $booking->save();
+                    // Update booking status to confirmed
+                    $booking->acceptance_status = 'accepted';
+                    $booking->save();
 
-        return view('payment.success', ['booking' => $booking]);
+                    // Calculate and create balance payment invoice
+                    $balanceAmount = $booking->total_price - ($booking->total_price * ($booking->deposit_percentage / 100));
+                    $balancePayment = Invoice::create([
+                        'booking_id' => $booking->id,
+                        'invoice_number' => 'INV-' . time() . '-' . $booking->id, // Generate a unique invoice number
+                        'invoice_date' => now(),
+                        'total_amount' => $balanceAmount,
+                        'status' => 'Unpaid',
+                    ]);
+
+                    $booking = Booking::with(['user', 'payments'])->findOrFail($bookingId);
+                    return view('payment.success', compact('booking', 'balancePayment', 'payments'));
+                }
+            }
+        } else {
+
+            // Multiple invoice logic
+            foreach ($invoices as $invoice) {
+                if ($invoice->status == 'Unpaid') {
+                    $invoice->status = 'Paid';
+                    $invoice->save();
+
+                    $currentPayment = Payment::create([
+                        'booking_id' => $bookingId,
+                        'type' => 'Balance',
+                        'amount' => $invoice->total_amount,
+                        'status' => 'Completed',
+                        'transaction_id' => request('payment_intent'), // Optionally store the Stripe payment intent ID
+                        'payment_method' => 'fpx', // Or 'card' based on method used
+                    ]);
+
+                    // Update booking status
+                    $booking->acceptance_status = 'accepted';
+                    $booking->progress_status = 'Waiting';
+                    $booking->save();
+
+                    $booking = Booking::with(['user', 'payments'])->findOrFail($bookingId);
+                    return view('payment.success', ['booking' => $booking, 'payments' => $currentPayment]);
+                }
+            }
+        }
+
+        // Default failure response
+        return redirect()->route('bookings.show', compact('booking'))->with('failed', 'Payment Failed');
     }
+
 
 
 
@@ -134,7 +209,7 @@ class BookingController extends Controller
 
         $booking = Booking::findOrFail($invoice->booking_id);
 
-        return view('client.invoice', compact('invoice','booking'));
+        return view('client.invoice', compact('invoice', 'booking'));
     }
 
     // Show the form for editing the specified booking
