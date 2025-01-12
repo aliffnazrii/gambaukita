@@ -90,7 +90,7 @@
                         <!-- Profile Picture -->
                         <div class="profile-pic-container mx-auto">
                             @if ($user->picture == '')
-                                <img src="https://via.placeholder.com/150" alt="Profile Picture"
+                                <img src="{{ asset('assets/images/users/6.jpg') }}" alt="Profile Picture"
                                     class="profile-pic img-fluid">
                             @else
                                 <img src="{{ asset($user->picture) }}" alt="Profile Picture"
@@ -245,7 +245,7 @@
                     </div>
                     <div class="card-body">
                         <ul class="list-group list-group-flush">
-                            @if (count($bookings) > 0)
+                            @if (count($bookings) != 0)
                                 @foreach ($bookings as $booking)
                                     <li class="list-group-item"><strong>{{ $booking->package->name }} :</strong>
                                         {{ $booking->event_date }} - {{ $booking->total_price }}</li>

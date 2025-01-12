@@ -23,6 +23,12 @@
         }
     </style>
 
+    @if (session('failed'))
+        <div class="alert alert-warning">{{ session('failed') }}</div>
+    @endif
+    
+
+
     <div class="row mt-3">
         <div class="col-9 m-auto">
             <div class="card card-body text-center">

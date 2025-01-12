@@ -7,9 +7,11 @@ use App\Models\Package;
 use App\Models\Schedule;
 use App\Models\Invoice;
 use App\Models\Payment;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\ClientMiddleware;
+use App\Notifications\notifications;
 
 class BookingController extends Controller
 {
@@ -33,6 +35,19 @@ class BookingController extends Controller
 
     public function checkdate(Request $req)
     {
+
+        if (Auth::user()) {
+            $check = Auth::user()->id;
+            $checkData = User::findOrFail($check);
+
+            if ($checkData->phone == '' && $checkData->address == '' && $checkData->postcode == '') {
+                return back()->with('failed', 'Please complete your profile before proceeding with this booking.');
+            }
+        } else {
+            return back()->with('failed', 'Login Required');
+        }
+
+
         $validated = $req->validate([
             'checkdate_input' => 'required|date|after:today', // Check for a valid date and future date
         ]);
@@ -52,6 +67,8 @@ class BookingController extends Controller
         }
     }
 
+
+    #OVERLAP SCHEDULE CHECK
     public function Datecheck($date)
     {
         $bookingDate = $date;
@@ -74,6 +91,18 @@ class BookingController extends Controller
     // Store a newly created booking in the database
     public function store(Request $request)
     {
+
+        if (Auth::user()) {
+            $check = Auth::user()->id;
+            $checkData = User::findOrFail($check);
+
+            if ($checkData->phone == '' && $checkData->address == '' && $checkData->postcode == '') {
+                return back()->with('failed', 'Please complete your profile before proceeding with this booking.');
+            }
+        } else {
+            return back()->with('failed', 'Login Required');
+        }
+
         $validatedData = $request->validate([
             'user_id' => 'required|exists:users,id',
             'package_id' => 'required|exists:packages,id',
@@ -118,6 +147,7 @@ class BookingController extends Controller
     }
 
 
+
     public function paymentSuccess($bookingId)
     {
         // Retrieve booking and related invoices
@@ -143,6 +173,7 @@ class BookingController extends Controller
 
                     // Update booking status to confirmed
                     $booking->acceptance_status = 'accepted';
+                    $booking->progress_status = 'Booked';
                     $booking->save();
 
                     // Calculate and create balance payment invoice

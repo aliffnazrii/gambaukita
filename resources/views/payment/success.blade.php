@@ -36,11 +36,11 @@
                         </tr>
                         <tr>
                             <td><strong>Deposit Paid:</strong></td>
-                            <td class="text-right">{{ number_format($booking->payments->latest()->amount, 2)}}</td>
+                            <td class="text-right">{{ number_format($booking->payments->last()->amount, 2)}}</td>
                         </tr>
                         <tr>
                             <td><strong>Remaining Balance:</strong></td>
-                            <td class="text-right">{{ number_format($booking->total_price - $booking->payments->latest()->amount, 2) }}
+                            <td class="text-right">{{ number_format($booking->total_price - $booking->payments->last()->amount, 2) }}
                             </td>
                         </tr>
                     </tbody>

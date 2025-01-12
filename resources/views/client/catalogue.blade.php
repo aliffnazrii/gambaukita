@@ -6,11 +6,6 @@
 
 @section('content')
 
-    <style>
-
-
-    </style>
-
     <div class="card card-body ">
         <h1 class="text-center m-5">GambauKita Packages</h1>
         <div class="col-md-9 m-auto">

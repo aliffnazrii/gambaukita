@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Notifications\notifications;
 
 use Illuminate\Http\Request;
 use App\Models\Package;

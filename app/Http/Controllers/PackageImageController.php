@@ -6,6 +6,7 @@ use App\Models\PackageImage;
 use App\Models\Package;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Notifications\notifications;
 
 class PackageImageController extends Controller
 {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Invoice;
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use App\Notifications\notifications;
 
 class InvoiceController extends Controller
 {

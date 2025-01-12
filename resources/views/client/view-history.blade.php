@@ -137,36 +137,54 @@
                     <h5 class="mb-0">Invoice Details</h5>
                 </div>
 
-                @foreach ($booking->invoices as $invoice)
-                    <div class="card-body">
-                        <table class="table table-bordered">
-                            <tr>
-                                <th>Invoice ID:</th>
-                                <td>{{ $invoice->invoice_number }}</td>
-                            </tr>
-                            <tr>
-                                <th>Invoice Date:</th>
-                                <td>{{ $invoice->invoice_date }}</td>
-                            </tr>
-                            <tr>
-                                <th>Amount:</th>
-                                <td>RM {{ number_format($invoice->total_amount, 2) }}</td>
-                            </tr>
-                            <tr>
-                                <th>Status:</th>
-                                <td>{{ $invoice->status }}</td>
-                            </tr>
-                        </table>
 
-                        <!-- Action Buttons -->
-                        <div class="text-center mt-4">
-                            <a href="{{ route('bookings.index') }}" class="btn btn-secondary">Back</a>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        @php
+                            $total = 0; // Initialize the total amount
+                            $status = ''; // Initialize status
+                            $date = ''; // Initialize date
+                            $invnum = '';
+                            $invoiceId = '';
+                        @endphp
+                        @foreach ($booking->invoices as $payment)
+                            @php
+                                if ($payment->status == 'Unpaid') {
+                                    $total = $total + $payment->total_amount;
+                                    $status = $payment->status;
+                                    $date = $payment->invoice_date;
+                                    $invnum = $payment->invoice_number;
+                                    $invoiceId = $payment->id;
+                                }
+                            @endphp
+                        @endforeach
+                        <tr>
+                            <th>Invoice ID:</th>
+                            <td>{{ $invnum }}</td>
+                        </tr>
+                        <tr>
+                            <th>Invoice Date:</th>
+                            <td>{{ \Carbon\Carbon::parse($date)->format('d M Y H:i') }}</td>
+                        </tr>
+                        <tr>
+                            <th>Amount:</th>
+                            <td>RM {{ number_format($total, 2) }}</td>
+                        </tr>
+                        <tr>
+                            <th>Status:</th>
+                            <td>{{ $status }}</td>
+                        </tr>
+                    </table>
 
-                            <a href="{{ route('booking.showInvoice', $invoice->id) }}" class="btn btn-info">View
-                                Invoice</a>
-                        </div>
+                    <!-- Action Buttons -->
+                    <div class="text-center mt-4">
+                        <a href="{{ route('bookings.index') }}" class="btn btn-secondary">Back</a>
+
+                        <a href="{{ route('booking.showInvoice', $invoiceId) }}" class="btn btn-info">View
+                            Invoice</a>
                     </div>
-                @endforeach
+                </div>
+
             </div>
         @endif
     </div>

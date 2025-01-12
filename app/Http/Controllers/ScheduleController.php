@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon; 
+use App\Notifications\notifications;
 
 class ScheduleController extends Controller
 {
@@ -125,11 +126,11 @@ class ScheduleController extends Controller
 public function ownerSchedule()
 {
     // Get authenticated user's schedules
-    $schedules = Schedule::where('user_id', auth()->user()->id)
+    $schedules = Schedule::where('user_id', Auth::user()->id)
         ->get(['start', 'end', 'time', 'title']);
 
     // Get all bookings for the authenticated user
-    $bookings = Booking::where('user_id', auth()->user()->id)
+    $bookings = Booking::where('user_id', Auth::user()->id)
         ->get(['event_date', 'event_time', 'venue', 'remark']);
 
     // Normalize schedules

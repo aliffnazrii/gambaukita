@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\File;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use App\Notifications\notifications;
+
+use PDO;
 
 class UserController extends Controller
 {
@@ -37,11 +40,31 @@ class UserController extends Controller
             'password' => 'required|min:8|confirmed',
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
         ]);
+
+        // Ensure that the user is retrieved after creation
+        $newuser = User::findOrFail($user->id);
+
+        if ($newuser) {
+            // Define notification data
+            $data = [
+                'title' => 'GambauKita',
+                'message' => 'Welcome to GambauKita',
+                'url' => '/users/' . $newuser->id, // Correct way to use the user's ID
+            ];
+
+            // Create the notification instance and send it
+            $Notification = new UserController();
+            $Notification->sendNotification($newuser, $data); // Pass the user model and data
+        }
+
+
+
+
 
         return redirect()->route('users.index')->with('success', 'User created successfully.');
     }
@@ -49,7 +72,7 @@ class UserController extends Controller
     // Display the specified user
     public function show(User $user)
     {
-        $bookings = Booking::with('package')->get();
+        $bookings = Booking::with('package')->where('user_id', $user->id)->get();
         return view('client.profile', compact('user', 'bookings'));
     }
 
@@ -71,9 +94,23 @@ class UserController extends Controller
             'state' => 'nullable|string|max:100',
         ]);
 
-        $user->update($reqval);
 
-        return view('client.profile', compact('user'))->with('success', 'User updated successfully.');
+
+        if ($user->update($reqval)) {
+
+            $notiId = Auth::user();
+            $data = [
+                'title' => 'GambauKita',
+                'message' => 'Information Update Succeed',
+                'url' => '/users/' . '$user->id',
+            ];
+
+            $Notification = new UserController();
+            $Notification->sendNotification($notiId, $data);
+        }
+
+        $bookings = Booking::with('package')->where('user_id', $user->id)->get();
+        return view('client.profile', compact('user', 'bookings'))->with('success', 'User updated successfully.');
     }
 
 
@@ -181,8 +218,14 @@ class UserController extends Controller
         return view('owner.owner-profile', compact('user'));
     }
 
-    public function viewClients(){
+    public function viewClients()
+    {
         $users = User::where('role', 'Client')->get();
         return view('owner.clients', compact('users'));
+    }
+
+    public function sendNotification(User $user, array $data)
+    {
+        $user->notify(new notifications($data));
     }
 }

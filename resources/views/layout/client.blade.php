@@ -13,6 +13,9 @@
         rel="stylesheet">
     <link href="{{ URL::asset('css/style.css') }}" rel="stylesheet">
     <script src=" {{ URL::asset('js/modernizr-3.6.0.min.js') }}"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
     @yield('header')
 </head>
 
@@ -43,119 +46,61 @@
 
             <div class="header-right">
                 <ul>
-                    <li class="icons"><a href="javascript:void(0)"><i class="mdi mdi-bell f-s-18"
-                                aria-hidden="true"></i>
-                            <div class="pulse-css"></div>
-                        </a>
-                        <div class="drop-down animated bounceInDown">
-                            <div class="dropdown-content-heading"><span class="text-left">Recent Notifications</span>
-                            </div>
-                            <div class="dropdown-content-body">
-                                <ul>
-                                    <li>
-                                        <a href="#">
-                                            <img class="pull-left m-r-10 avatar-img"
-                                                src="{{ URL::asset('assets/images/avatar/1.jpg') }}" alt="">
-                                            <div class="notification-content"><small
-                                                    class="notification-timestamp pull-right">02:34 PM</small>
-                                                <div class="notification-heading">Mr. Dmitry</div>
-                                                <div class="notification-text">5 members joined today</div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img class="pull-left m-r-10 avatar-img"
-                                                src="{{ URL::asset('assets/images/avatar/1.jpg') }}" alt="">
-                                            <div class="notification-content"><small
-                                                    class="notification-timestamp pull-right">02:34 PM</small>
-                                                <div class="notification-heading">Mariam</div>
-                                                <div class="notification-text">likes a photo of you</div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img class="pull-left m-r-10 avatar-img"
-                                                src="{{ URL::asset('assets/images/avatar/1.jpg') }}" alt="">
-                                            <div class="notification-content"><small
-                                                    class="notification-timestamp pull-right">02:34 PM</small>
-                                                <div class="notification-heading">Tasnim</div>
-                                                <div class="notification-text">Hi Teddy, Just wanted to let you ...
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img class="pull-left m-r-10 avatar-img"
-                                                src="{{ URL::asset('assets/images/avatar/1.jpg') }}" alt="">
-                                            <div class="notification-content"><small
-                                                    class="notification-timestamp pull-right">02:34 PM</small>
-                                                <div class="notification-heading">Ishrat Jahan</div>
-                                                <div class="notification-text">Hi Teddy, Just wanted to let you ...
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="text-center"><a href="#" class="more-link">See All</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="icons"><a href="javascript:void(0)"><i class="mdi mdi-comment f-s-18"
-                                aria-hidden="true"></i>
-                            <div class="pulse-css"></div>
-                        </a>
-                        <div class="drop-down animated bounceInDown">
-                            <div class="dropdown-content-heading"><span class="text-left">2 New Messages</span>
-                            </div>
-                            <div class="dropdown-content-body">
-                                <ul>
+                    @auth
+                        <li class="icons"><a href="javascript:void(0)"><i class="mdi mdi-bell f-s-18"
+                                    aria-hidden="true"></i>
+                                <div class="pulse-css"></div>
+                            </a>
+                            <div class="drop-down animated bounceInDown">
+                                <div class="dropdown-content-heading"><span class="text-left">Recent Notifications</span>
+                                </div>
+                                <div class="dropdown-content-body">
+                                    <ul>
 
-                                    <li class="notification-unread">
-                                        <a href="#">
-                                            <img class="pull-left m-r-10 avatar-img"
-                                                src="{{ URL::asset('assets/images/avatar/1.jpg') }}" alt="">
-                                            <div class="notification-content"><small
-                                                    class="notification-timestamp pull-right">02:34 PM</small>
-                                                <div class="notification-heading">Ishrat Jahan</div>
-                                                <div class="notification-text">Hi Teddy, Just wanted to let you ...
-                                                </div>
+
+                                        @if (auth()->user()->notifications->count() > 0)
+                                            @foreach (auth()->user()->notifications->take(7) as $notification)
+                                                <li>
+                                                    <a href="{{ $notification->data['url'] }}">
+                                                        <!-- Avatar image -->
+                                                        <img class="pull-left m-r-10 avatar-img"
+                                                            src="{{ URL::asset('assets/images/avatar/1.jpg') }}"
+                                                            alt="User Avatar">
+
+                                                        <!-- Notification content -->
+                                                        <div class="notification-content">
+                                                            <!-- Timestamp -->
+                                                            <small class="notification-timestamp pull-right">
+                                                                {{ $notification->created_at->format('h:i A') }}
+                                                            </small>
+
+                                                            <!-- Notification title -->
+                                                            <div class="notification-heading">
+                                                                <strong>{{ $notification->data['title'] }}</strong>
+                                                            </div>
+
+                                                            <!-- Notification message -->
+                                                            <div class="notification-text">
+                                                                {{ $notification->data['message'] }}
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        @else
+                                            <div class="text-center">
+                                                <strong>No notifications</strong>
                                             </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img class="pull-left m-r-10 avatar-img"
-                                                src="{{ URL::asset('assets/images/avatar/1.jpg') }}" alt="">
-                                            <div class="notification-content"><small
-                                                    class="notification-timestamp pull-right">02:34 PM</small>
-                                                <div class="notification-heading">Saiul Islam</div>
-                                                <div class="notification-text">Hi Teddy, Just wanted to let you ...
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img class="pull-left m-r-10 avatar-img"
-                                                src="{{ URL::asset('assets/images/avatar/1.jpg') }}" alt="">
-                                            <div class="notification-content"><small
-                                                    class="notification-timestamp pull-right">02:34 PM</small>
-                                                <div class="notification-heading">Ishrat Jahan</div>
-                                                <div class="notification-text">Hi Teddy, Just wanted to let you ...
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="text-center"><a href="#" class="more-link">See All</a>
-                                    </li>
-                                </ul>
+                                        @endif
+
+
+
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-                    </li>
+                        </li>
+                    @endauth
+
 
                     <div class="icons"><a href="javascript:void(0)"><i class="mdi mdi-account f-s-20"
                                 aria-hidden="true"></i></a>
@@ -168,21 +113,24 @@
                                     @guest
                                         @if (Route::has('login'))
                                             <li class="nav-item">
-                                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                                <a class="nav-link" href="{{ route('login') }}">
+                                                    <i class="bi bi-box-arrow-in-right"></i> {{ __('Login') }}
+                                                </a>
                                             </li>
                                         @endif
 
                                         @if (Route::has('register'))
                                             <li class="nav-item">
-                                                <a class="nav-link"
-                                                    href="{{ route('register') }}">{{ __('Register') }}</a>
+                                                <a class="nav-link" href="{{ route('register') }}">
+                                                    <i class="bi bi-person-plus"></i> {{ __('Register') }}
+                                                </a>
                                             </li>
                                         @endif
                                     @else
                                         <li class="nav-item">
-                                            <a id="nav-link" class="nav-link" href="/profile" role="button"
-                                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                                v-pre>
+                                            <a id="nav-link" class="nav-link"
+                                                href="{{ route('users.show', Auth::user()->id) }}" role="button"
+                                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                                 <i class="mdi mdi-account"></i>
                                                 {{ Auth::user()->name }}
                                             </a>
