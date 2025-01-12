@@ -115,39 +115,39 @@
                                 <div class="card-box m-b-50">
                                     <div id="calendar"></div>
                                     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
+                                        document.addEventListener('DOMContentLoaded', function() {
+                                            var calendarEl = document.getElementById('calendar');
 
-        // Create the events array directly in JavaScript
-        var events = [
-            @foreach ($allEvents as $event)
-                {
-                    title: "{{ $event['title'] }}",
-                    start: "{{ $event['date'] }}T{{ $event['time'] ?? '00:00:00' }}", // Combine date and time for the start field
-                    @if (!empty($event['end_date']))
-                        end: "{{ $event['end_date'] }}T{{ $event['time'] ?? '23:59:59' }}", // Combine end date and time (if exists)
-                    @endif
-                    extendedProps: {
-                        type: "{{ $event['type'] }}" // Add custom property to distinguish event type
-                    }
-                },
-            @endforeach
-        ];
+                                            // Create the events array directly in JavaScript
+                                            var events = [
 
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            events: events, // Pass the dynamically generated events array
-            eventContent: function(arg) {
-                // Customize event content to show type
-                return {
-                    html: `<b>${arg.event.title}</b><br><small>${arg.event.extendedProps.type}</small>`
-                };
-            }
-        });
+                                                @foreach ($schedules as $schedule)
+                                                    {
+                                                        title: "{{ $schedule->title }}",
+                                                        start: "{{ $schedule->start }}T{{ $schedule->time }}", // Combine date and time for the start field
+                                                        end: "{{ $schedule->end }}T{{ $schedule->time }}", // Combine date and time for the end field
+                                                    },
+                                                @endforeach
 
-        calendar.render();
-    });
-</script>
+
+                                                @foreach ($bookings as $schedule)
+                                                    {
+                                                        title: "{{ $schedule->user->name }}",
+                                                        start: "{{ $schedule->event_date }}T{{ $schedule->event_time }}", // Combine date and time for the start field
+                                                        end: "{{ $schedule->event_date }}T{{ $schedule->event_time }}",
+                                                    },
+                                                @endforeach
+
+                                            ];
+
+                                            var calendar = new FullCalendar.Calendar(calendarEl, {
+                                                initialView: 'dayGridMonth', // Switch to a week view with times
+                                                events: events, // Use the directly generated array
+                                            });
+
+                                            calendar.render();
+                                        });
+                                    </script>
 
                                 </div>
                             </div>
@@ -159,7 +159,7 @@
             </div>
             <!-- /# column -->
         </div>
-        
+
         <!-- Day Off Application Form -->
         <div class="card p-3">
             <h3>Apply for a Day Off</h3>
@@ -218,10 +218,10 @@
                 </thead>
                 <tbody>
                     <!-- Existing approved off days will be dynamically populated here -->
-                    @foreach ($allEvents as $schedule)
+                    @foreach ($schedules as $schedule)
                         <tr>
-                            <td>{{ $schedule['date'] }}</td>
-                            <td>{{ $schedule['end_date'] }}</td>
+                            <td>{{ $schedule['start'] }}</td>
+                            <td>{{ $schedule['end'] }}</td>
                             <td>{{ $schedule['title'] }}</td>
                         </tr>
                     @endforeach

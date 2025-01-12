@@ -76,27 +76,23 @@
                 <div class="card border">
                     <div class="card-body">
                         <h4 class="card-title">Messages</h4>
-                        <div class="media border-bottom-1 p-t-15 p-b-15">
-                            <img src="../../assets/images/avatar/1.jpg" class="mr-3 rounded-circle" alt="">
-                            <div class="media-body">
-                                <h5>John Tomas</h5>
-                                <p class="m-b-0">I shared this on my fb wall a few months back,</p>
-                            </div><span class="text-muted f-s-12">April 24, 2018</span>
-                        </div>
-                        <div class="media border-bottom-1 p-t-15 p-b-15">
-                            <img src="../../assets/images/avatar/2.jpg" class="mr-3 rounded-circle" alt="">
-                            <div class="media-body">
-                                <h5>John Tomas</h5>
-                                <p class="m-b-0">I shared this on my fb wall a few months back,</p>
-                            </div><span class="text-muted f-s-12">April 24, 2018</span>
-                        </div>
-                        <div class="media p-t-15 p-b-15">
-                            <img src="../../assets/images/avatar/3.jpg" class="mr-3 rounded-circle" alt="">
-                            <div class="media-body">
-                                <h5>John Tomas</h5>
-                                <p class="m-b-0">I shared this on my fb wall a few months back,</p>
-                            </div><span class="text-muted f-s-12">April 24, 2018</span>
-                        </div>
+                        @if (auth()->user()->notifications->count() > 0)
+                            @foreach (auth()->user()->notifications->take(7) as $notification)
+                                <div class="media border-bottom-1 p-t-15 p-b-15">
+                                    <img src="../../assets/images/avatar/1.jpg" class="mr-3 rounded-circle" alt="">
+                                    <div class="media-body">
+                                        <h5>{{ $notification->data['title'] }}</h5>
+                                        <p class="m-b-0"> {{ $notification->data['message'] }}</p>
+                                    </div><span
+                                        class="text-muted f-s-12">{{ $notification->created_at->format('h:i A') }}</span>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="text-center">
+                                <strong>No notifications</strong>
+                            </div>
+                        @endif
+
                     </div>
                 </div>
             </div>

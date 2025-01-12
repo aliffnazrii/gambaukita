@@ -202,7 +202,7 @@
 
                                                 @foreach ($schedules as $schedule)
                                                     {
-                                                        title: "{{ 'Booked' }}",
+                                                        title: "{{ 'Unavailable' }}",
                                                         start: "{{ $schedule->start }}T{{ $schedule->time }}", // Combine date and time for the start field
                                                         end: "{{ $schedule->end }}T{{ $schedule->time }}", // Combine date and time for the end field
                                                     },
