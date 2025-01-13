@@ -9,10 +9,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Notifications\notifications;
+use App\Notifications\EmailNotifications;
 
 use PDO;
 
@@ -46,26 +48,28 @@ class UserController extends Controller
             'password' => bcrypt($request->password),
         ]);
 
-        // Ensure that the user is retrieved after creation
-        $newuser = User::findOrFail($user->id);
+        #EMAIL NOTI
+        $email = new UserController();
+        $email->sendEmail($user, 'user_registered', [$user->id]);
+
+        #NOTIFY OWNER
+        $newuser = User::where('role', 'Owner')->get();
 
         if ($newuser) {
             // Define notification data
             $data = [
                 'title' => 'GambauKita',
-                'message' => 'Welcome to GambauKita',
-                'url' => '/users/' . $newuser->id, // Correct way to use the user's ID
+                'message' => 'New User Signed Up !',
+                'url' => 'owner/view-clients', // Correct way to use the user's ID
             ];
 
             // Create the notification instance and send it
-            $Notification = new UserController();
-            $Notification->sendNotification($newuser, $data); // Pass the user model and data
+
+            foreach ($newuser as $owner) {
+                $Notification = new UserController();
+                $Notification->sendNotification($owner, $data); // Pass the user model and data
+            }
         }
-
-
-
-
-
         return redirect()->route('users.index')->with('success', 'User created successfully.');
     }
 
@@ -98,6 +102,12 @@ class UserController extends Controller
 
         if ($user->update($reqval)) {
 
+
+            $email = new UserController();
+            $email->sendEmail($user, 'update_account', [$user->id]);
+
+
+
             $notiId = Auth::user();
             $data = [
                 'title' => 'GambauKita',
@@ -110,7 +120,8 @@ class UserController extends Controller
         }
 
         $bookings = Booking::with('package')->where('user_id', $user->id)->get();
-        return view('client.profile', compact('user', 'bookings'))->with('success', 'User updated successfully.');
+        return redirect()->back()
+            ->with('success', 'User updated successfully.');
     }
 
 
@@ -125,7 +136,18 @@ class UserController extends Controller
             'state' => 'nullable|string|max:100',
         ]);
 
-        $user->update($reqval);
+        if ($user->update($reqval)) {
+
+            $notiId = Auth::user();
+            $data = [
+                'title' => 'GambauKita',
+                'message' => 'Information Update Succeed',
+                'url' => '/users/' . '$user->id',
+            ];
+
+            $Notification = new UserController();
+            $Notification->sendNotification($notiId, $data);
+        }
 
         return redirect()->route('owner.profile', compact('user'))->with('success', 'User updated successfully.');
     }
@@ -146,7 +168,19 @@ class UserController extends Controller
 
         // Update the password
         $user->password = Hash::make($request->password);
-        $user->save();
+
+        if ($user->save()) {
+
+            $notiId = Auth::user();
+            $data = [
+                'title' => 'GambauKita',
+                'message' => 'Password Updated',
+                'url' => '/users/' . '$user->id',
+            ];
+
+            $Notification = new UserController();
+            $Notification->sendNotification($notiId, $data);
+        }
 
         return redirect()->route('owner.profile')->with('success', 'Password updated successfully.');
     }
@@ -180,6 +214,23 @@ class UserController extends Controller
         // Update the user's profile picture path in the database
         $user->picture = $path;
         $user->save();
+
+        if ($user->save()) {
+
+
+            $email = new UserController();
+            $email->sendEmail($user, 'profile_picture_update', [$user->id]);
+
+            $notiId = Auth::user();
+            $data = [
+                'title' => 'GambauKita',
+                'message' => 'Profile Picture Updated',
+                'url' => '/users/' . '$user->id',
+            ];
+
+            $Notification = new UserController();
+            $Notification->sendNotification($notiId, $data);
+        }
         return redirect()->back();
     }
 
@@ -227,5 +278,11 @@ class UserController extends Controller
     public function sendNotification(User $user, array $data)
     {
         $user->notify(new notifications($data));
+    }
+
+
+    public function sendEmail(User $user, $activity, array $data)
+    {
+        $user->notify(new EmailNotifications($user, $activity, $data));
     }
 }
