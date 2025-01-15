@@ -5,7 +5,7 @@
 @section('content')
 
     <!-- Main Content -->
-    <div class="container mt-4">
+    <div class="container">
         <div class="card">
             <div class="card-header">
                 <h3 class="mb-0">Booking List</h3>

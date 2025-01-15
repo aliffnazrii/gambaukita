@@ -68,10 +68,10 @@
     </style>
 
     <!-- Main Content -->
-    <div class="container mt-4">
+    <div class="container">
         <div class="card">
             <div class="card-header">
-                <h3>Add / Edit Catalogue</h3>
+                <h3>Add Package</h3>
             </div>
             <div class="card-body">
                 @if ($errors->any())
@@ -101,8 +101,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="packagePrice" class="form-label">Price</label>
-                        <input type="number" id="packagePrice" name="price" class="form-control "
-                            required>
+                        <input type="number" id="packagePrice" name="price" class="form-control " required>
                     </div>
                     <div class="mb-3">
                         <label for="packageDuration" class="form-label">Duration (Days)</label>
@@ -150,7 +149,7 @@
         <!-- Catalogue Table -->
         <div class="card mt-4">
             <div class="card-header">
-                <h3>Current Available Catalogue</h3>
+                <h3>Current Packages</h3>
             </div>
             <div class="card-body">
                 <table id="catalogueTable" class="table table-striped table-bordered">

@@ -34,8 +34,8 @@
                     </div>
                     <div class="form-group">
                         <label for="eventDate">Event Date:</label>
-                        <input type="text" class="form-control" id="eventDate" value="{{ $booking->event_date }}"
-                            readonly>
+                        <input type="text" class="form-control" id="eventDate"
+                            value="{{ \Carbon\Carbon::parse($booking->event_date)->format('d M Y') }}" readonly>
                     </div>
                     <div class="form-group">
                         <label for="eventTime">Event Time:</label>
@@ -44,7 +44,7 @@
                     </div>
                     <div class="form-group">
                         <label for="remark">Remark:</label>
-                        <input type="text" class="form-control" id="remark" value="{{ $booking->remark }}" readonly>
+                        <input type="text" class="form-control" id="remark" value="{{ $booking->remark ? $booking->remark : 'No Remark' }}" readonly>
                     </div>
                     <div class="form-group">
                         <label for="acceptanceStatus">Acceptance Status:</label>
@@ -57,14 +57,18 @@
                             value="{{ $booking->progress_status }}" readonly>
                     </div>
 
-                    @if ($booking->link == '')
-                        <div class="form-group">
-                            <label for="venue">Google Drive Link:</label>
-                            <input type="text" class="form-control" value="{{ $booking->link }}" readonly>
+
+                    <div class="form-group">
+                        <label for="venue">Google Drive Link:</label>
+                        <input type="text" class="form-control"
+                            value="{{ $booking->link ? $booking->link : 'No Link Yet' }}" readonly>
+                        @if ($booking->link != '')
                             <a class="btn btn-sm btn-primary mt-3" href="{{ $booking->link }}" target="_blank"
-                                rel="noopener noreferrer">Open Drive</a>
-                        </div>
-                    @endif
+                                rel="noopener noreferrer" disabled>Open Drive</a>
+                        @else
+                        @endif
+                    </div>
+
 
                     <div class="form-group">
                         <label for="totalPrice">Total Price:</label>
@@ -72,16 +76,12 @@
                             value="RM{{ number_format($booking->total_price, 2) }}" readonly>
                     </div>
                 </form>
-                @if ($booking->progress_status == 'Waiting')
-                    <button type="submit" class="btn btn-primary" disabled>Paid</button>
-                @elseif($booking->progress_status == 'Completed')
-                @else
-                    <a href="{{ route('booking.payment', $booking->id) }}" class="btn btn-primary">Make Payment</a>
-                @endif
+
             </div>
         </div>
 
-        @if ($booking->progress_status == 'Completed')
+        @if ($booking->progress_status == 'Completed' || $booking->invoices->where('status', 'Paid')->count() == 2)
+
 
 
             <div class="card">
@@ -123,8 +123,8 @@
 
                     <!-- Action Buttons -->
                     <div class="text-center mt-4">
-                        <a href="javascript:history.back()" class="btn btn-secondary">Back</a>
-                        <a href="{{ route('booking.showInvoice', $payment->id) }}" class="btn btn-info">View
+                        <a href="{{ route('bookings.index') }}" class="btn btn-secondary">Back</a>
+                        <a href="{{ route('booking.showReceipt', $payment->id) }}" class="btn btn-info">View
                             Receipt</a>
                     </div>
                 </div>
@@ -164,7 +164,7 @@
                         </tr>
                         <tr>
                             <th>Invoice Date:</th>
-                            <td>{{ \Carbon\Carbon::parse($date)->format('d M Y H:i') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($date)->format('d M Y') }}</td>
                         </tr>
                         <tr>
                             <th>Amount:</th>
@@ -174,12 +174,19 @@
                             <th>Status:</th>
                             <td>{{ $status }}</td>
                         </tr>
+
                     </table>
+                    @if ($booking->progress_status == 'Waiting')
+                        <button class="btn btn-primary" readonly>Paid</button>
+                    @elseif($booking->progress_status == 'Completed')
+                        <button class="btn btn-primary" readonly>Paid</button>
+                    @else
+                        <a href="{{ route('booking.payment', $booking->id) }}" class="btn btn-primary">Make Payment</a>
+                    @endif
 
                     <!-- Action Buttons -->
                     <div class="text-center mt-4">
                         <a href="{{ route('bookings.index') }}" class="btn btn-secondary">Back</a>
-
                         <a href="{{ route('booking.showInvoice', $invoiceId) }}" class="btn btn-info">View
                             Invoice</a>
                     </div>

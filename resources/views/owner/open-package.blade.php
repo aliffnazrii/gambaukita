@@ -119,9 +119,9 @@
                     <div class="mb-3">
                         <label for="packagestatus" class="form-label">Package Status</label>
                         <select class="form-control" name="status">
-                            <option value="active" {{ $package->status == 'active' ? 'selected' : '' }}>Active
+                            <option value="active" {{ $package->status == 'Active' ? 'selected' : '' }}>Active
                             </option>
-                            <option value="inactive"{{ $package->status == 'inactive' ? 'selected' : '' }}>
+                            <option value="inactive"{{ $package->status == 'Inactive' ? 'selected' : '' }}>
                                 Inactive</option>
                         </select>
 

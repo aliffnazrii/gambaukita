@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Middleware\CheckUserRole;
 use App\Models\Package;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\PackageImage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App\Notifications\notifications;
+use Illuminate\Support\Facades\Auth;
 
 
 class PackageController extends Controller
@@ -53,6 +55,21 @@ class PackageController extends Controller
             'price' => $request->price,
             'duration' => $request->duration,
         ]);
+
+        if ($package) {
+            $newuser = User::all();
+
+            $data = [
+                'title' => 'GambauKita',
+                'message' => 'New Package Added.',
+                'url' => route('packages.edit', $package->id),
+            ];
+
+            foreach ($newuser as $owner) {
+                $Notification = new NotificationController();
+                $Notification->sendNotification($owner, $data); // Pass the user model and data
+            }
+        }
 
         // Check if images are uploaded
         if ($request->hasFile('images')) {
@@ -128,7 +145,22 @@ class PackageController extends Controller
         ]);
 
         $package = Package::findOrFail($id);
-        $package->update($validatedData);
+
+
+        if ($package->update($validatedData)) {
+            $newuser = User::all();
+
+            $data = [
+                'title' => 'GambauKita',
+                'message' => 'Package updated.',
+                'url' => route('packages.edit', $package->id),
+            ];
+
+            foreach ($newuser as $owner) {
+                $Notification = new NotificationController();
+                $Notification->sendNotification($owner, $data); // Pass the user model and data
+            }
+        }
 
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
@@ -148,19 +180,6 @@ class PackageController extends Controller
 
         return redirect()->back()->with('success', 'Package updated successfully.');
     }
-
-    // // Remove the specified package from the database
-    // public function destroy($id)
-    // {
-    //     $package = Package::findOrFail($id);
-
-    //     $status = 'inactive';
-    //     // Set the 'status' column to 'inactive'
-    //     $package->update(['status' =>  $status]);
-    //     return redirect()->route('owner.package')->with('success', 'Package deleted successfully.');
-    // }
-
-
 
 
     // OWNER SECTION

@@ -59,19 +59,19 @@
 
 
                                         @if (auth()->user()->notifications->count() > 0)
-                                            @foreach (auth()->user()->notifications->take(7) as $notification)
+                                            @foreach (auth()->user()->notifications->take(5) as $notification)
                                                 <li>
                                                     <a href="{{ $notification->data['url'] }}">
                                                         <!-- Avatar image -->
                                                         <img class="pull-left m-r-10 avatar-img"
-                                                            src="{{ URL::asset('assets/images/avatar/1.jpg') }}"
-                                                            alt="User Avatar">
+                                                            src="{{ asset('storage/images/logo.png') }}"
+                                                            style="max-height: 50px; max-width: 50px;" alt="">
 
                                                         <!-- Notification content -->
                                                         <div class="notification-content">
                                                             <!-- Timestamp -->
                                                             <small class="notification-timestamp pull-right">
-                                                                {{ $notification->created_at->format('h:i A') }}
+                                                                {{ \Carbon\Carbon::parse($notification->created_at)->diffForHumans() }}
                                                             </small>
 
                                                             <!-- Notification title -->
@@ -178,8 +178,7 @@
 
                 <li><a href="{{ route('packages.index') }}"><i class="mdi mdi-book-open"></i> <span
                             class="nav-text">Packages</span></a></li>
-                <li><a href="{{ route('portfolios.index') }}"><i class="mdi mdi-camera"></i> <span
-                            class="nav-text">Portfolio</span></a></li>
+
 
                 <li><a
                         @auth()
@@ -188,7 +187,7 @@
                             href="/login"
                             @endauth><i
                             class="mdi mdi-calendar-check"></i> <span class="nav-text">Booking</span></a></li>
-
+ 
                 <li><a
                         @auth()
                             href="{{ route('bookings.index') }}"

@@ -38,8 +38,10 @@
                                             <td class="py-2 px-4 border-b border-gray-300">{{ $loop->iteration }}</td>
                                             <td class="py-2 px-4 border-b border-gray-300">{{ $booking->package->name }}
                                             </td>
-                                            <td class="py-2 px-4 border-b border-gray-300">{{ $booking->venue }}</td>
-                                            <td class="py-2 px-4 border-b border-gray-300">{{ $booking->event_date }}</td>
+                                            <td class="py-2 px-4 border-b border-gray-300"><a href="{{ $booking->venue }}" target="_blank" rel="noopener noreferrer">Open Maps</a></td>
+                                            <td class="py-2 px-4 border-b border-gray-300">
+                                                {{ \Carbon\Carbon::parse($booking->event_date)->format('l, d M Y') }}
+                                            </td>
                                             <td class="py-2 px-4 border-b border-gray-300">{{ $booking->event_time }}</td>
 
                                             <td class="py-2 px-4 border-b border-gray-300">
@@ -65,6 +67,7 @@
                                     <th class="py-2 px-4 border-b border-gray-300 text-left text-gray-700">Event Date</th>
                                     <th class="py-2 px-4 border-b border-gray-300 text-left text-gray-700">Event Time</th>
                                     <th class="py-2 px-4 border-b border-gray-300 text-left text-gray-700">Total Price</th>
+                                    <th class="py-2 px-4 border-b border-gray-300 text-left text-gray-700">Status</th>
                                     <th class="py-2 px-4 border-b border-gray-300 text-left text-gray-700">Action</th>
                                 </tr>
                             </tfoot>

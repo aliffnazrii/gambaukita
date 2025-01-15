@@ -17,12 +17,9 @@ class PaymentController extends Controller
     public function processBookingPayment($booking_id)
     {
         $booking = Booking::findOrFail($booking_id);
-        // $depositAmount = $booking->invoices->first()->deposit_amount;
         $depositAmount = Invoice::where('booking_id', $booking->id)
-            ->latest('created_at') // Sort by the `created_at` column in descending order
+            ->latest('created_at')
             ->value('total_amount');
-
-
 
         $depositAmount = $depositAmount * 100;
 
@@ -33,12 +30,15 @@ class PaymentController extends Controller
         $paymentIntent = PaymentIntent::create([
             'amount' => $depositAmount, // Amount in cents
             'currency' => 'myr',
-            'payment_method_types' => ['fpx', 'card'],
+            'payment_method_types' => [
+                'fpx',
+                'card',
+                'grabpay',
+            ],
             'metadata' => [
                 'booking_id' => $booking->id,
             ],
         ]);
-
 
         return view('payment.payment', [
             'clientSecret' => $paymentIntent->client_secret,
@@ -46,5 +46,4 @@ class PaymentController extends Controller
             'depositAmount' => $depositAmount,
         ]);
     }
-
 }

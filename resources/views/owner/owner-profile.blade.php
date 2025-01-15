@@ -63,7 +63,7 @@
     </style>
 
     <!-- Main Content -->
-    <div class="container mt-4">
+    <div class="container">
         <!-- Profile Image and Information -->
         <div class="card mb-3 p-3">
             <h3>Personal Information</h3>

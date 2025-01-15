@@ -7,7 +7,7 @@
 @section('content')
 
 
-<div class="card card-body mt-4">
+<div class="card card-body">
     <div class="container">
         <div class="row">
             <div class="col">

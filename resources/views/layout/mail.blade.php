@@ -25,7 +25,7 @@
         }
 
         .email-header {
-            background-color: #005f56;
+            background-color: #9068be;
             padding: 20px;
             text-align: center;
         }
@@ -54,21 +54,21 @@
         }
 
         .email-footer {
-            background-color: #f8f8f8;
+            background-color: #9068be;
             padding: 15px;
             text-align: center;
             font-size: 14px;
-            color: #777777;
+            color: #333333;
         }
 
         .email-footer a {
-            color: #005f56;
+            color: #6e4e93;
             text-decoration: none;
         }
 
         .btn {
             display: inline-block;
-            background-color: #005f56;
+            background-color: #9068be;
             color: #ffffff;
             padding: 10px 20px;
             font-size: 16px;
@@ -78,7 +78,7 @@
         }
 
         .btn:hover {
-            background-color: #004d4b;
+            background-color: #9c70ce;
         }
     </style>
 </head>
@@ -87,7 +87,7 @@
     <div class="email-container">
         <!-- Email Header -->
         <div class="email-header">
-            <img src="{{ URL::asset('assets/images/logo.png') }}" alt="GambauKita.com">
+          
             <h1>GambauKita.com</h1>
         </div>
 
@@ -114,7 +114,7 @@
                 You can also visit our <a href="{{ $website_url }}">website</a> for more information.
             </p>
             <p>
-                &copy; 2023 GambauKita. All rights reserved.
+                &copy; 2025 GambauKita. All rights reserved.
             </p>
         </div>
     </div>

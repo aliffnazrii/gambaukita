@@ -100,7 +100,7 @@
     <script src="../..assets/bootstrap-datetimepicker.min.js"></script>
 
     <!-- Main Content -->
-    <div class="container mt-4">
+    <div class="container">
 
         <div class="row">
             <div class="col-lg-12">
@@ -161,7 +161,7 @@
         </div>
 
         <!-- Day Off Application Form -->
-        <div class="card p-3">
+        <div class="card p-3 mt-3">
             <h3>Apply for a Day Off</h3>
             <form id="dayOffForm" action="{{ route('schedules.store') }}" method="post">
                 @csrf
@@ -211,18 +211,129 @@
             <table id="dayOffTable" class="table table-striped">
                 <thead>
                     <tr>
+                        <th>#</th>
                         <th>Date Start</th>
                         <th>Date End</th>
                         <th>Reason</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Existing approved off days will be dynamically populated here -->
+
                     @foreach ($schedules as $schedule)
                         <tr>
+                            <td>{{ $loop->iteration }}</td>
                             <td>{{ $schedule['start'] }}</td>
                             <td>{{ $schedule['end'] }}</td>
                             <td>{{ $schedule['title'] }}</td>
+                            <td>
+                                <button type="button" class="btn btn-primary btn-md" data-toggle="modal"
+                                    data-target="#modelId{{ $schedule->id }}">
+                                    View
+                                </button>
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-primary btn-md" data-toggle="modal"
+                                    data-target="#modelId">
+                                    Delete
+                                </button>
+                            </td>
+                            <!-- Modal -->
+                            <div class="modal fade" id="modelId" tabindex="-1" role="dialog"
+                                aria-labelledby="modelTitleId" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Delete Schedule</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="{{ route('schedules.destroy', $schedule->id) }}" method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <p>This action cannot be undone</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">Delete</button>
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Close</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="modelId{{ $schedule->id }}" tabindex="-1" role="dialog"
+                                aria-labelledby="modelTitleId" aria-hidden="true">
+                                <div class="modal-dialog modal-lg " role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">{{ $schedule->title }}</h5>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="dayOffForm" action="{{ route('schedules.update', $schedule->id) }}"
+                                                method="post">
+                                                @csrf
+                                                @method('PUT')
+
+                                                <div class="form-group">
+                                                    <label for="datePicker">Start Date:</label>
+                                                    <div class='input-group date' id='datePicker'>
+                                                        <input type='date' class="form-control" name="start"
+                                                            value="{{ $schedule->start }}" placeholder="YYYY-MM-DD"
+                                                            disabled />
+                                                        <span class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="datePicker">End Date:</label>
+                                                    <div class='input-group date' id='datePicker'>
+                                                        <input type='date' class="form-control" name="end"
+                                                            value="{{ $schedule->end }}" placeholder="YYYY-MM-DD"
+                                                            disabled />
+                                                        <span class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Time Picker -->
+                                                <div class="form-group">
+                                                    <label for="timePicker">Select Time:</label>
+                                                    <div class='input-group date' id='timePicker'>
+                                                        <input type='time' name="time" class="form-control"
+                                                            value="{{ $schedule->time }}" placeholder="HH:mm" />
+                                                        <span class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-time"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="dayOffReason">Reason</label>
+                                                    <textarea class="form-control" id="dayOffReason" name="title" required>{{ $schedule->title }}</textarea>
+                                                </div>
+
+
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">Save</button>
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Close</button>
+                                        </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         </tr>
                     @endforeach
 

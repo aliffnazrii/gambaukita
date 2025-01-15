@@ -11,20 +11,18 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\ClientMiddleware;
-use App\Notifications\notifications;
+use App\Http\Controllers\NotificationController;
 
 class BookingController extends Controller
 {
 
 
-    // Display a listing of the bookings
     public function index()
     {
         $bookings = Booking::with(['user', 'package'])->where('user_id', Auth::user()->id)->get();
         return view('client.history', compact('bookings'));
     }
 
-    // Show the form for creating a new booking
     public function create()
     {
         $packages = Package::all();
@@ -67,7 +65,6 @@ class BookingController extends Controller
         }
     }
 
-
     #OVERLAP SCHEDULE CHECK
     public function Datecheck($date)
     {
@@ -86,9 +83,6 @@ class BookingController extends Controller
         }
     }
 
-
-
-    // Store a newly created booking in the database
     public function store(Request $request)
     {
 
@@ -146,8 +140,6 @@ class BookingController extends Controller
         return redirect()->back()->withErrors($checkDate)->withInput();
     }
 
-
-
     public function paymentSuccess($bookingId)
     {
         // Retrieve booking and related invoices
@@ -168,13 +160,51 @@ class BookingController extends Controller
                         'amount' => $invoice->total_amount,
                         'status' => 'Completed',
                         'transaction_id' => request('payment_intent'), // Optionally store the Stripe payment intent ID
-                        'payment_method' => 'fpx', // Or 'card' based on method used
+                        'payment_method' => request('payment_method_types'), // Or 'card' based on method used
                     ]);
 
                     // Update booking status to confirmed
-                    $booking->acceptance_status = 'accepted';
+                    $booking->acceptance_status = 'Accepted';
                     $booking->progress_status = 'Booked';
                     $booking->save();
+
+                    if ($booking) {
+
+                        $user =  Auth::user();
+
+                        if ($user) {
+
+                            $data = [
+                                'title' => 'GambauKita',
+                                'message' => 'A booking at' . \Carbon\Carbon::parse($booking->event_date)->format('d M, Y') . ' has been made.',
+                                'url' => 'bookings.index',
+                            ];
+
+                            #EMAIL NOTI
+                            $email = new NotificationController();
+                            $email->sendEmail($user, 'create_booking_client', [$booking]);
+                        }
+
+                        #NOTIFY OWNER
+                        $newuser = User::where('role', 'Owner')->get();
+
+                        // \Carbon\Carbon::parse($booking->event_date)->format('d M, Y')
+
+                        if ($newuser) {
+
+                            $data = [
+                                'title' => 'GambauKita',
+                                'message' => 'A booking at' . \Carbon\Carbon::parse($booking->event_date)->format('d M, Y') . ' has been made.',
+                                'url' => 'owner.booking',
+                            ];
+
+                            foreach ($newuser as $owner) {
+                                $Notification = new NotificationController();
+                                $Notification->sendNotification($owner, $data);
+                                $email->sendEmail($user, 'create_booking_owner', [$booking]);
+                            }
+                        }
+                    }
 
                     // Calculate and create balance payment invoice
                     $balanceAmount = $booking->total_price - ($booking->total_price * ($booking->deposit_percentage / 100));
@@ -192,7 +222,7 @@ class BookingController extends Controller
             }
         } else {
 
-            // Multiple invoice logic
+            // PAY BALANCE
             foreach ($invoices as $invoice) {
                 if ($invoice->status == 'Unpaid') {
                     $invoice->status = 'Paid';
@@ -203,14 +233,55 @@ class BookingController extends Controller
                         'type' => 'Balance',
                         'amount' => $invoice->total_amount,
                         'status' => 'Completed',
-                        'transaction_id' => request('payment_intent'), // Optionally store the Stripe payment intent ID
-                        'payment_method' => 'fpx', // Or 'card' based on method used
+                        'transaction_id' => request('payment_intent'),
+                        'payment_method' => request('payment_method_types')
                     ]);
 
-                    // Update booking status
                     $booking->acceptance_status = 'accepted';
-                    $booking->progress_status = 'Waiting';
-                    $booking->save();
+
+
+                    #NOTIFICATION
+                    if ($booking->save()) {
+
+                        $user =  Auth::user();
+
+                        if ($user) {
+
+                            #PUSH NOTI
+                            $data = [
+                                'title' => 'GambauKita',
+                                'message' => 'Balance payment for booking at ' . \Carbon\Carbon::parse($booking->event_date)->format('d M, Y') . ' has been made.',
+                                'url' => route('bookings.show', $booking->id),
+                            ];
+
+                            #EMAIL NOTI
+                            $email = new NotificationController();
+                            $email->sendEmail($user, 'pay_balance', [$booking]);
+                        }
+
+                        #NOTIFY OWNER
+                        $newuser = User::where('role', 'Owner')->get();
+
+                        // \Carbon\Carbon::parse($booking->event_date)->format('d M, Y')
+
+                        #PUSH NOTI
+                        if ($newuser) {
+
+                            $data = [
+                                'title' => 'GambauKita',
+                                'message' => 'A booking at' . \Carbon\Carbon::parse($booking->event_date)->format('d M, Y') . ' has been fully paid.',
+                                'url' => route('bookings.edit', $booking->id),
+                            ];
+
+                            #EMAIL NOTI
+
+                            foreach ($newuser as $owner) {
+                                $Notification = new NotificationController();
+                                $Notification->sendNotification($owner, $data);
+                                $email->sendEmail($user, 'create_booking_owner', [$booking]);
+                            }
+                        }
+                    }
 
                     $booking = Booking::with(['user', 'payments'])->findOrFail($bookingId);
                     return view('payment.success', ['booking' => $booking, 'payments' => $currentPayment]);
@@ -218,15 +289,9 @@ class BookingController extends Controller
             }
         }
 
-        // Default failure response
         return redirect()->route('bookings.show', compact('booking'))->with('failed', 'Payment Failed');
     }
 
-
-
-
-
-    // Display the specified booking
     public function show($id)
     {
         $booking = Booking::with(['user', 'package', 'payments', 'invoices'])->findOrFail($id);
@@ -235,7 +300,8 @@ class BookingController extends Controller
 
     public function showInvoice($id)
     {
-        // $booking = Booking::with(['user', 'package', 'payments', 'invoices'])->findOrFail($id);
+
+
         $invoice = Invoice::findOrFail($id);
 
         $booking = Booking::findOrFail($invoice->booking_id);
@@ -243,46 +309,100 @@ class BookingController extends Controller
         return view('client.invoice', compact('invoice', 'booking'));
     }
 
-    // Show the form for editing the specified booking
+    public function showReceipt($id)
+    {
+
+
+        $payments_id = Payment::findOrFail($id);
+
+        $booking = Booking::findOrFail($payments_id->booking_id);
+
+        $payment = Payment::where('booking_id', $booking->id)->get();
+
+        $amount = 0;
+        $details = [];
+
+
+        foreach ($payment as $pay) {
+            $amount = $amount + $pay->amount;
+            $transaction_id = $pay->transaction_id;
+            $created_at = $pay->created_at;
+            $status = $pay->status;
+        }
+        return view('payment.receipt', compact('booking', 'amount', 'created_at', 'details', 'transaction_id', 'status'));
+
+
+
+        $details[] = [
+            'amount' => $amount + $pay->amount,
+            'transaction_id' => $pay->transaction_id,
+            'created_at' => $pay->created_at,
+            'status' => $pay->status,
+        ];
+
+        return view('payment.receipt', compact('details', 'booking'));
+    }
+
+
     public function edit($id)
     {
         $booking = Booking::with(['user', 'package', 'payments', 'invoices'])->findOrFail($id);
-        // $booking = Booking::findOrFail($id);
-
         return view('owner.detailedBooking', compact('booking'));
     }
 
-    // Update the specified booking in the database
     public function update(Request $request, $id)
     {
-
         $validatedData = $request->validate([
             'progress_status' => 'required|in:Pending,Booked,Waiting,Completed,Cancelled', // Only allow specific statuses
-            // 'link' => $request->progress_status === 'Completed' ? 'required|url' : 'nullable', // Conditionally required for 'Completed'
+            'link' => $request->progress_status === 'Completed' ? 'required|url' : 'nullable', // Conditionally required for 'Completed'
         ]);
-
-        // Find the booking by ID
         $booking = Booking::findOrFail($id);
 
-        // Update the booking with validated data
-        $booking->update($validatedData);
 
-        // $booking = ([
-        //     'progress_status' => 'Completed',
-        // ]);
+        #NOTIFICATION
+        if ($booking->update($validatedData)) {
 
+            $user =  Auth::user();
 
+            if ($user) {
+
+                #PUSH NOTI
+                $data = [
+                    'title' => 'GambauKita',
+                    'message' => 'Your booking status has been updated.',
+                    'url' => route('bookings.show', $booking->id),
+                ];
+
+                #EMAIL NOTI
+                $email = new NotificationController();
+                $email->sendEmail($user, 'update_booking', [$booking]);
+            }
+
+            #NOTIFY OWNER
+            $newuser = User::where('role', 'Owner')->get();
+
+            // \Carbon\Carbon::parse($booking->event_date)->format('d M, Y')
+
+            #PUSH NOTI
+            if ($newuser) {
+
+                $data = [
+                    'title' => 'GambauKita',
+                    'message' => 'A booking has been fully paid.',
+                    'url' => route('bookings.edit', $booking->id),
+                ];
+
+                #EMAIL NOTI
+
+                foreach ($newuser as $owner) {
+                    $Notification = new NotificationController();
+                    $Notification->sendNotification($owner, $data);
+                    // $email->sendEmail($user, 'create_booking_owner', [$booking]);
+                }
+            }
+        }
 
         return redirect()->back()->with('success', 'Booking updated successfully.');
-    }
-
-    // Remove the specified booking from the database
-    public function destroy($id)
-    {
-        $booking = Booking::findOrFail($id);
-        $booking->delete();
-
-        return redirect()->route('bookings.index')->with('success', 'Booking deleted successfully.');
     }
 
 

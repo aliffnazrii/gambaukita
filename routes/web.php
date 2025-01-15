@@ -7,7 +7,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PackageImageController;
 use App\Http\Controllers\ScheduleController;
-use App\Http\Controllers\PortfolioController;
+// use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\CheckUserRole;
@@ -28,8 +28,8 @@ Route::resource('bookings', BookingController::class)->middleware('clientLogin')
 Route::resource('payments', PaymentController::class)->middleware('clientLogin');
 Route::resource('invoices', InvoiceController::class)->middleware('clientLogin');
 Route::resource('package-images', PackageImageController::class)->middleware('ownerLogin');
-Route::resource('schedules', ScheduleController::class)->middleware('ownerLogin');
-Route::resource('portfolios', PortfolioController::class);
+// Route::resource('schedules', ScheduleController::class)->middleware('ownerLogin');
+// Route::resource('portfolios', PortfolioController::class);
 Route::resource('users', UserController::class);
 
 
@@ -58,6 +58,7 @@ Route::put('/users/update-picture/{id}', [UserController::class, 'updateProfileP
 
 Route::post('/checkdate', [BookingController::class, 'checkdate'])->name('booking.checkdate')->middleware('clientLogin');
 Route::get('/invoice/{id}', [BookingController::class, 'showInvoice'])->name('booking.showInvoice')->middleware('clientLogin');
+Route::get('/receipt/{id}', [BookingController::class, 'showReceipt'])->name('booking.showReceipt')->middleware('clientLogin');
 
 #PAYMENT GATEWAYY
 Route::get('/payment-success/{bookingId}', [BookingController::class, 'paymentSuccess'])->name('payment.success')->middleware('clientLogin');
@@ -83,8 +84,8 @@ Route::put('/owner/updatePassword/{user}', [UserController::class, 'updatePasswo
 Route::post('/upload-package', [PackageController::class, 'uploadPackageImage'])->name('packages.uploadImage')->middleware('ownerLogin');
 
 #portfolios management route
-Route::get('/owner/portfolios', [PortfolioController::class, 'ownerPortfolio'])->name('owner.portfolio')->middleware('ownerLogin');
-Route::delete('/owner/portfolios/delete/{id}', [PortfolioController::class, 'destroy'])->name('portfolios.destroy')->middleware('ownerLogin');
+// Route::get('/owner/portfolios', [PortfolioController::class, 'ownerPortfolio'])->name('owner.portfolio')->middleware('ownerLogin');
+// Route::delete('/owner/portfolios/delete/{id}', [PortfolioController::class, 'destroy'])->name('portfolios.destroy')->middleware('ownerLogin');
 
 
 #booking management route

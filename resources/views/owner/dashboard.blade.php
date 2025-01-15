@@ -77,14 +77,16 @@
                     <div class="card-body">
                         <h4 class="card-title">Messages</h4>
                         @if (auth()->user()->notifications->count() > 0)
-                            @foreach (auth()->user()->notifications->take(7) as $notification)
+                            @foreach (auth()->user()->notifications->take(5) as $notification)
                                 <div class="media border-bottom-1 p-t-15 p-b-15">
-                                    <img src="../../assets/images/avatar/1.jpg" class="mr-3 rounded-circle" alt="">
+                                    <img src="{{ asset('storage/images/logo.png') }}" class="mr-3 rounded-circle"
+                                        style="max-height: 50px; max-width: 50px;" alt="...">
                                     <div class="media-body">
                                         <h5>{{ $notification->data['title'] }}</h5>
                                         <p class="m-b-0"> {{ $notification->data['message'] }}</p>
                                     </div><span
-                                        class="text-muted f-s-12">{{ $notification->created_at->format('h:i A') }}</span>
+                                        class="text-muted f-s-12">{{ \Carbon\Carbon::parse($notification->created_at)->diffForHumans() }}
+                                    </span>
                                 </div>
                             @endforeach
                         @else

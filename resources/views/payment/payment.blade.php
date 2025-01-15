@@ -6,57 +6,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pay Deposit</title>
     <style>
+        /* General Body Styling */
         body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background-color: #f0f4f8;
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f6f9;
             margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
 
+        /* Payment Container Styling */
         .payment-container {
             text-align: center;
-            padding: 30px;
-            border: 1px solid #e0e0e0;
             background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             width: 100%;
+            max-width: 450px;
         }
 
         h2 {
             margin-bottom: 20px;
-            color: #333;
-            font-size: 24px;
+            font-size: 26px;
+            font-weight: bold;
+            color: #2d2d2d;
         }
 
         .amount {
-            font-size: 20px;
-            color: #007bff;
+            font-size: 22px;
+            color: #1e90ff;
             margin-bottom: 20px;
+            font-weight: bold;
         }
 
+        /* Payment Element Styling */
         #payment-element {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             padding: 15px;
-            border: 1px solid #e0e0e0;
-            border-radius: 5px;
-            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fafafa;
         }
 
+        /* Button Styling */
         #pay-button {
-            padding: 12px 25px;
+            padding: 14px 30px;
             font-size: 18px;
             color: #ffffff;
-            background-color: #007bff;
+            background-color: #1e90ff;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
             width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
         #pay-button:hover {
@@ -68,26 +75,42 @@
             cursor: not-allowed;
         }
 
+        /* Footer Styling */
         .footer {
-            margin-top: 20px;
+            margin-top: 30px;
             font-size: 14px;
-            color: #777;
+            color: #7f8c8d;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .payment-container {
+                padding: 30px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            .amount {
+                font-size: 20px;
+            }
         }
     </style>
 </head>
 
 <body>
     <div class="payment-container">
-        <h2>Pay Deposit</h2>
+        <h2>Pay Your Deposit</h2>
         <div class="amount">MYR {{ $depositAmount / 100 }}</div>
 
         <!-- Payment Element for Stripe -->
         <div id="payment-element"></div>
 
-        <button id="pay-button">Pay Deposit</button>
+        <button id="pay-button">Pay Now</button>
 
         <div class="footer">
-            <p>Your payment is secure and processed by Stripe.</p>
+            <p>Your payment is securely processed by Stripe.</p>
         </div>
     </div>
 

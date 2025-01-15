@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\ValidationException;
 use App\Notifications\notifications;
 use App\Notifications\EmailNotifications;
@@ -47,6 +48,9 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password),
         ]);
+
+        Notification::route('mail', $user->email)
+            ->notify(new EmailNotifications($user, 'user_registered', [$user->id]));
 
         #EMAIL NOTI
         $email = new UserController();
@@ -246,8 +250,8 @@ class UserController extends Controller
         $bookings = Booking::all();
 
 
-        $startOfMonth = Carbon::now()->startOfMonth();  // Start of the current month
-        $endOfMonth = Carbon::now()->endOfMonth();      // End of the current month
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth = Carbon::now()->endOfMonth();
 
         $monthlyEarnings = Booking::with('payments')->whereHas('payments', function ($query) {
             $query->where('status', 'Completed');

@@ -27,7 +27,8 @@
     <div id="preloader">
         <div class="loader">
             <svg class="circular" viewBox="25 25 50 50">
-                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="3" stroke-miterlimit="10" />
+                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="3"
+                    stroke-miterlimit="10" />
             </svg>
         </div>
     </div>
@@ -56,201 +57,120 @@
             </div>
         </div>
     </nav> --}}
-<!-- header -->
-<div class="header" style="z-index:10;">
-    <div class="nav-header">
-        <div class="brand-logo"><a href="/main-home"><b><img src="../../assets/images/logo.png" alt=""> </b><span class="brand-title">GambauKita.my</span></a>
+    <!-- header -->
+    <div class="header" style="z-index:10;">
+        <div class="nav-header">
+            <div class="brand-logo"><a href="/main-home"><b><img src="../../assets/images/logo.png" alt="">
+                    </b><span class="brand-title">GambauKita.my</span></a>
+            </div>
+            <div class="nav-control">
+                <div class="hamburger"><span class="line"></span> <span class="line"></span> <span
+                        class="line"></span>
+                </div>
+            </div>
         </div>
-        <div class="nav-control">
-            <div class="hamburger"><span class="line"></span> <span class="line"></span> <span class="line"></span>
+        <div class="header-content">
+
+            <div class="header-right">
+                <ul>
+                    <div class="icons"><a href="javascript:void(0)"><i class="mdi mdi-account f-s-20"
+                                aria-hidden="true"></i></a>
+                        <div class="drop-down dropdown-profile animated bounceInDown">
+                            <div class="dropdown-content-body">
+                                <ul>
+                                    <li class="nav-item"><a class="nav-link" href="#"><i
+                                                class="mdi mdi-email"></i>Inbox</a>
+                                    </li>
+                                    @guest
+                                        @if (Route::has('login'))
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                            </li>
+                                        @endif
+
+                                        @if (Route::has('register'))
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                            </li>
+                                        @endif
+                                    @else
+                                        <li class="nav-item">
+                                            <a id="nav-link" class="nav-link" href="/profile" role="button"
+                                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                                <i class="mdi mdi-account"></i>
+                                                {{ Auth::user()->name }}
+                                            </a>
+                                        </li>
+
+                                        <li class="nav-item">
+
+                                            <a class="nav-link" href="{{ route('logout') }}"
+                                                onclick="event.preventDefault();
+                                             document.getElementById('logout-form').submit();">
+                                                <i class="icon-power"></i>
+                                                {{ __('Logout') }}
+                                            </a>
+
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                                class="d-none">
+                                                @csrf
+                                            </form>
+                                        </li>
+
+
+
+                                    </ul>
+                                @endguest
+                            </div>
+                        </div>
+                </ul>
             </div>
         </div>
     </div>
-    <div class="header-content">
 
-        <div class="header-right">
-            <ul>
-                <li class="icons"><a href="javascript:void(0)"><i class="mdi mdi-bell f-s-18" aria-hidden="true"></i>
-                        <div class="pulse-css"></div>
-                    </a>
-                    <div class="drop-down animated bounceInDown">
-                        <div class="dropdown-content-heading"><span class="text-left">Recent Notifications</span>
-                        </div>
-                        <div class="dropdown-content-body">
-                            <ul>
-                                <li>
-                                    <a href="#">
-                                        <img class="pull-left m-r-10 avatar-img" src="../../assets/images/avatar/1.jpg" alt="">
-                                        <div class="notification-content"><small class="notification-timestamp pull-right">02:34 PM</small>
-                                            <div class="notification-heading">Mr. Dmitry</div>
-                                            <div class="notification-text">5 members joined today</div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img class="pull-left m-r-10 avatar-img" src="../../assets/images/avatar/2.jpg" alt="">
-                                        <div class="notification-content"><small class="notification-timestamp pull-right">02:34 PM</small>
-                                            <div class="notification-heading">Mariam</div>
-                                            <div class="notification-text">likes a photo of you</div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img class="pull-left m-r-10 avatar-img" src="../../assets/images/avatar/3.jpg" alt="">
-                                        <div class="notification-content"><small class="notification-timestamp pull-right">02:34 PM</small>
-                                            <div class="notification-heading">Tasnim</div>
-                                            <div class="notification-text">Hi Teddy, Just wanted to let you ...</div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img class="pull-left m-r-10 avatar-img" src="../../assets/images/avatar/4.jpg" alt="">
-                                        <div class="notification-content"><small class="notification-timestamp pull-right">02:34 PM</small>
-                                            <div class="notification-heading">Ishrat Jahan</div>
-                                            <div class="notification-text">Hi Teddy, Just wanted to let you ...</div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="text-center"><a href="#" class="more-link">See All</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+    <!-- #/ header -->
+    <!-- sidebar -->
+    <div class="nk-sidebar" style="z-index:5;">
+        <div class="nk-nav-scroll">
+            <ul class="metismenu" id="menu">
+                <li class="nav-label">Main</li>
+
+                <li><a href="/"><i class="mdi mdi-home"></i> <span class="nav-text">Home</span></a></li>
+
+
+                <li><a href="{{ route('packages.index') }}"><i class="mdi mdi-book-open"></i> <span
+                            class="nav-text">Packages</span></a></li>
+
+
+                <li><a
+                        @auth()
+                            href="{{ route('bookings.create') }}"
+                            @else
+                            href="/login"
+                            @endauth><i
+                            class="mdi mdi-calendar-check"></i> <span class="nav-text">Booking</span></a></li>
+
+                <li><a
+                        @auth()
+                            href="{{ route('bookings.index') }}"
+                            @else
+                            href="/login"
+                            @endauth><i
+                            class="mdi mdi-history"></i> <span class="nav-text">History</span></a></li>
+                <li><a
+                        @auth()
+                                    href="{{ route('users.show', AUTH::user()->id) }}"
+                                    @else
+                                    href="/login"
+                                    @endauth><i
+                            class="mdi mdi-account"></i> <span class="nav-text">Profile</span></a></li>
+                <li><a href="/about"><i class="mdi mdi-information"></i> <span class="nav-text">About Us</span></a>
                 </li>
-                <li class="icons"><a href="javascript:void(0)"><i class="mdi mdi-comment f-s-18" aria-hidden="true"></i>
-                        <div class="pulse-css"></div>
-                    </a>
-                    <div class="drop-down animated bounceInDown">
-                        <div class="dropdown-content-heading"><span class="text-left">2 New Messages</span>
-                        </div>
-                        <div class="dropdown-content-body">
-                            <ul>
-
-                                <li class="notification-unread">
-                                    <a href="#">
-                                        <img class="pull-left m-r-10 avatar-img" src="../../assets/images/avatar/2.jpg" alt="">
-                                        <div class="notification-content"><small class="notification-timestamp pull-right">02:34 PM</small>
-                                            <div class="notification-heading">Ishrat Jahan</div>
-                                            <div class="notification-text">Hi Teddy, Just wanted to let you ...</div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img class="pull-left m-r-10 avatar-img" src="../../assets/images/avatar/3.jpg" alt="">
-                                        <div class="notification-content"><small class="notification-timestamp pull-right">02:34 PM</small>
-                                            <div class="notification-heading">Saiul Islam</div>
-                                            <div class="notification-text">Hi Teddy, Just wanted to let you ...</div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img class="pull-left m-r-10 avatar-img" src="../../assets/images/avatar/4.jpg" alt="">
-                                        <div class="notification-content"><small class="notification-timestamp pull-right">02:34 PM</small>
-                                            <div class="notification-heading">Ishrat Jahan</div>
-                                            <div class="notification-text">Hi Teddy, Just wanted to let you ...</div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="text-center"><a href="#" class="more-link">See All</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </li>
-
-                <div class="icons"><a href="javascript:void(0)"><i class="mdi mdi-account f-s-20" aria-hidden="true"></i></a>
-                    <div class="drop-down dropdown-profile animated bounceInDown">
-                        <div class="dropdown-content-body">
-                            <ul>
-                                <li class="nav-item"><a class="nav-link" href="#"><i class="mdi mdi-email"></i>Inbox</a>
-                                </li>
-                                @guest
-                                @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                                @endif
-
-                                @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                                @endif
-                                @else
-                                <li class="nav-item">
-                                    <a id="nav-link" class="nav-link" href="/profile" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                        <i class="mdi mdi-account"></i>
-                                        {{ Auth::user()->name }}
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-
-                                    <a class="nav-link" href="{{ route('logout') }}"
-                                        onclick="event.preventDefault();
-                                             document.getElementById('logout-form').submit();"> <i class="icon-power"></i>
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </li>
-
-
-
-                            </ul>
-                            @endguest
-
-
-
-                        </div>
-                    </div>
-
+                <!-- <li><a href="/login"><i class="mdi mdi-login"></i> <span class="nav-text">Login</span></a></li> -->
             </ul>
         </div>
+        <!-- #/ nk nav scroll -->
     </div>
-</div>
-
-<!-- #/ header -->
-<!-- sidebar -->
-<div class="nk-sidebar" style="z-index:5;">
-    <div class="nk-nav-scroll">
-        <ul class="metismenu" id="menu">
-            <li class="nav-label">Main</li>
-
-            <li><a href="/"><i class="mdi mdi-home"></i> <span class="nav-text">Home</span></a></li>
-
-            <li><a @auth()
-                    href="{{  route('users.show', AUTH::user()->id)}}"
-                    @else
-                    href="/login"
-                    @endauth><i class="mdi mdi-account"></i> <span class="nav-text">Profile</span></a></li>
-            <li><a href="{{ route('packages.index')}}"><i class="mdi mdi-book-open"></i> <span class="nav-text">Catalogue</span></a></li>
-
-            <li><a @auth()
-                    href="{{ route('bookings.create')}}"
-                    @else
-                    href="/login"
-                    @endauth><i class="mdi mdi-calendar-check"></i> <span class="nav-text">Booking</span></a></li>
-
-            <li><a @auth()
-                    href="{{ route('bookings.index')}}"
-                    @else
-                    href="/login"
-                    @endauth><i class="mdi mdi-history"></i> <span class="nav-text">History</span></a></li>
-                    
-            <li><a href="/about"><i class="mdi mdi-information"></i> <span class="nav-text">About Us</span></a></li>
-            <!-- <li><a href="/login"><i class="mdi mdi-login"></i> <span class="nav-text">Login</span></a></li> -->
-        </ul>
-    </div>
-    <!-- #/ nk nav scroll -->
-</div>
 
 
     <!-- content body -->

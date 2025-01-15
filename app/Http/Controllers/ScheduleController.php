@@ -8,35 +8,23 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-use App\Notifications\notifications;
+use App\Http\Controllers\NotificationController;
 
 class ScheduleController extends Controller
 {
-    // Display a listing of the schedules
+
     public function index()
     {
-
-
         $schedules = Schedule::all();
-
         return view('owner.schedule', compact('schedules'));
     }
 
     public function getEvents()
     {
         $schedules = Schedule::all();
-
         return response()->json($schedules);
     }
 
-    // Show the form for creating a new schedule
-    public function create()
-    {
-        $users = User::all();
-        return view('schedules.create', compact('users'));
-    }
-
-    // Store a newly created schedule in the database
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -47,12 +35,10 @@ class ScheduleController extends Controller
             'time' => 'required|date_format:H:i',
         ]);
 
-        // Check for overlap with bookings
         $bookingOverlapExists = Booking::where('user_id', $request->user_id)
             ->whereBetween('event_date', [$request->start, $request->end])
             ->exists();
 
-        // Check for overlap with existing schedules
         $scheduleOverlapExists = Schedule::where('user_id', $request->user_id)
             ->where(function ($query) use ($request) {
                 $query->whereBetween('start', [$request->start, $request->end])
@@ -64,65 +50,90 @@ class ScheduleController extends Controller
             })
             ->exists();
 
-        // If overlaps exist in either bookings or schedules, return an error
         if ($bookingOverlapExists || $scheduleOverlapExists) {
             return redirect()->back()->withErrors(['overlap' => 'The schedule overlaps with an existing booking or schedule. Please choose a different time.']);
         }
 
-        // Create the schedule if no overlap
-        Schedule::create($validatedData);
+
+        $schedule =  Schedule::create($validatedData);
+
+        if ($schedule) {
+
+            $user =  Auth::user();
+
+            #EMAIL NOTI
+            $email = new NotificationController();
+            $email->sendEmail($user, 'create_schedule', [$schedule->id]);
+
+            #NOTIFY OWNER
+            $newuser = User::where('role', 'Owner')->get();
+
+            $data = [
+                'title' => 'GambauKita',
+                'message' => 'New Schedule Added.',
+                'url' => 'owner/schedule', // Correct way to use the user's ID
+            ];
+
+            foreach ($newuser as $owner) {
+                $Notification = new NotificationController();
+                $Notification->sendNotification($owner, $data); // Pass the user model and data
+            }
+        }
 
         return redirect()->route('owner.schedule')->with('success', 'Schedule created successfully.');
     }
 
-
-    // Display the specified schedule
-    public function show($id)
-    {
-        $schedule = Schedule::with('user')->findOrFail($id);
-        return view('schedules.show', compact('schedule'));
-    }
-
-    // Show the form for editing the specified schedule
-    public function edit($id)
-    {
-        $schedule = Schedule::findOrFail($id);
-        $users = User::all();
-        return view('schedules.edit', compact('schedule', 'users'));
-    }
-
-    // Update the specified schedule in the database
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'date' => 'required|date',
-            'reason' => 'nullable|string|max:255',
+            'title' => 'required|string|max:255',
+            'time' => 'required|date_format:H:i',
         ]);
 
         $schedule = Schedule::findOrFail($id);
-        $schedule->update($validatedData);
+       
 
-        return redirect()->route('schedules.index')->with('success', 'Schedule updated successfully.');
+        if ($schedule->update($validatedData)) {
+
+            $newuser = User::where('role', 'Owner')->get();
+            $data = [
+                'title' => 'GambauKita',
+                'message' => 'Schedule ' . $schedule->title . ' Updated.',
+                'url' => 'owner/schedule',
+            ];
+            foreach ($newuser as $owner) {
+                $Notification = new NotificationController();
+                $Notification->sendNotification($owner, $data);
+            }
+        }
+        return redirect()->route('owner.schedule')->with('success', 'Schedule updated successfully.');
     }
 
-    // Remove the specified schedule from the database
     public function destroy($id)
     {
         $schedule = Schedule::findOrFail($id);
         $schedule->delete();
 
-        return redirect()->route('schedules.index')->with('success', 'Schedule deleted successfully.');
+        if ($schedule->delete()) {
+
+            $user =  Auth::user();
+            $newuser = User::where('role', 'Owner')->get();
+            $data = [
+                'title' => 'GambauKita',
+                'message' => 'Schedule ' . $schedule->title . ' deleted successfully.',
+                'url' => 'owner/schedule', // Correct way to use the user's ID
+            ];
+
+            foreach ($newuser as $owner) {
+                $Notification = new NotificationController();
+                $Notification->sendNotification($owner, $data); // Pass the user model and data
+            }
+        }
+
+        return redirect()->route('owner.schedule')->with('success', 'Schedule deleted successfully.');
     }
 
     // owner section
-
-    // public function ownerSchedule(){
-    //     $schedules  = Schedule::with('user')->where('user_id', AUTH::user()->id)->get();
-    // $bookings = Booking::get('event_date');
-    //     return view('owner.schedule', compact('schedules'));
-    // }
-
     public function ownerSchedule()
     {
         $schedules = Schedule::all();

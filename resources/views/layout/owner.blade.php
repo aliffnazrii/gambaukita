@@ -31,7 +31,8 @@
         <!-- header -->
         <div class="header" style="z-index:10;">
             <div class="nav-header">
-                <div class="brand-logo"><a href="/main-home"><b><img src="{{ URL::asset('assets/images/logo.png') }}" alt="">
+                <div class="brand-logo"><a href="/main-home"><b><img src="{{ URL::asset('assets/images/logo.png') }}"
+                                alt="">
                         </b><span class="brand-title">GKAdmin</span></a>
                 </div>
                 <div class="nav-control">
@@ -54,110 +55,37 @@
                                 </div>
                                 <div class="dropdown-content-body">
                                     <ul>
-                                        <li>
-                                            <a href="#">
-                                                <img class="pull-left m-r-10 avatar-img"
-                                                    src="../../assets/images/avatar/1.jpg" alt="">
-                                                <div class="notification-content"><small
-                                                        class="notification-timestamp pull-right">02:34 PM</small>
-                                                    <div class="notification-heading">Mr. Dmitry</div>
-                                                    <div class="notification-text">5 members joined today</div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <img class="pull-left m-r-10 avatar-img"
-                                                    src="../../assets/images/avatar/2.jpg" alt="">
-                                                <div class="notification-content"><small
-                                                        class="notification-timestamp pull-right">02:34 PM</small>
-                                                    <div class="notification-heading">Mariam</div>
-                                                    <div class="notification-text">likes a photo of you</div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <img class="pull-left m-r-10 avatar-img"
-                                                    src="../../assets/images/avatar/3.jpg" alt="">
-                                                <div class="notification-content"><small
-                                                        class="notification-timestamp pull-right">02:34 PM</small>
-                                                    <div class="notification-heading">Tasnim</div>
-                                                    <div class="notification-text">Hi Teddy, Just wanted to let you ...
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <img class="pull-left m-r-10 avatar-img"
-                                                    src="../../assets/images/avatar/4.jpg" alt="">
-                                                <div class="notification-content"><small
-                                                        class="notification-timestamp pull-right">02:34 PM</small>
-                                                    <div class="notification-heading">Ishrat Jahan</div>
-                                                    <div class="notification-text">Hi Teddy, Just wanted to let you ...
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="text-center"><a href="#" class="more-link">See All</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="icons"><a href="javascript:void(0)"><i class="mdi mdi-comment f-s-18"
-                                    aria-hidden="true"></i>
-                                <div class="pulse-css"></div>
-                            </a>
-                            <div class="drop-down animated bounceInDown">
-                                <div class="dropdown-content-heading"><span class="text-left">2 New Messages</span>
-                                </div>
-                                <div class="dropdown-content-body">
-                                    <ul>
 
-                                        <li class="notification-unread">
-                                            <a href="#">
-                                                <img class="pull-left m-r-10 avatar-img"
-                                                    src="../../assets/images/avatar/2.jpg" alt="">
-                                                <div class="notification-content"><small
-                                                        class="notification-timestamp pull-right">02:34 PM</small>
-                                                    <div class="notification-heading">Ishrat Jahan</div>
-                                                    <div class="notification-text">Hi Teddy, Just wanted to let you ...
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <img class="pull-left m-r-10 avatar-img"
-                                                    src="../../assets/images/avatar/3.jpg" alt="">
-                                                <div class="notification-content"><small
-                                                        class="notification-timestamp pull-right">02:34 PM</small>
-                                                    <div class="notification-heading">Saiul Islam</div>
-                                                    <div class="notification-text">Hi Teddy, Just wanted to let you ...
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <img class="pull-left m-r-10 avatar-img"
-                                                    src="../../assets/images/avatar/4.jpg" alt="">
-                                                <div class="notification-content"><small
-                                                        class="notification-timestamp pull-right">02:34 PM</small>
-                                                    <div class="notification-heading">Ishrat Jahan</div>
-                                                    <div class="notification-text">Hi Teddy, Just wanted to let you ...
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="text-center"><a href="#" class="more-link">See All</a>
-                                        </li>
+                                        @if (auth()->user()->notifications->count() > 0)
+                                            @foreach (auth()->user()->notifications->take(5) as $notification)
+                                                <li>
+                                                    <a href="{{ $notification->data['url'] }}">
+                                                        <img class="pull-left m-r-10 avatar-img"
+                                                            src="{{ asset('storage/images/logo.png') }}"
+                                                            style="max-height: 50px; max-width: 50px;" alt="">
+                                                        <div class="notification-content"><small
+                                                                class="notification-timestamp pull-right">{{ \Carbon\Carbon::parse($notification->created_at)->diffForHumans() }}</small>
+                                                            <div class="notification-heading">
+                                                                {{ $notification->data['title'] }}</div>
+                                                            <div class="notification-text">
+                                                                {{ $notification->data['message'] }}
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        @else
+                                            <div class="text-center">
+                                                <strong>No notifications</strong>
+                                            </div>
+                                        @endif
+
+
                                     </ul>
                                 </div>
                             </div>
                         </li>
+
 
                         <div class="icons"><a href="javascript:void(0)"><i class="mdi mdi-account f-s-20"
                                     aria-hidden="true"></i></a>
@@ -239,9 +167,7 @@
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="{{ route('owner.schedule') }}">Schedule</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{{ route('owner.portfolio') }}">Portfolios</a>
-                    </li>
+
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="{{ route('owner.profile') }}">Profile</a>
                     </li>
@@ -269,16 +195,10 @@
         @endif
         <!-- #/ sidebar -->
         <!-- content body -->
-        <div class="content-body my-3">
+        <div class="content-body">
             @yield('content')
         </div>
-        <!-- #/ content body -->
-        <!-- footer -->
-        <!-- <div class="footer">
-            <div class="copyright">
-                <p>Copyright &copy; <a href="">GambauKita</a> 2024, by <a href="" target="_blank">aliffnazrii</a></p>
-            </div>
-        </div> -->
+
 
         <footer class="footer">
             <div class="container">

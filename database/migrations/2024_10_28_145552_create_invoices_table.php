@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('invoice_number')->unique(); // Unique identifier for the invoice
             $table->date('invoice_date'); // Date the invoice was issued
             $table->decimal('total_amount', 10, 2); // Total amount on the invoice
-            $table->string('status'); // e.g., "unpaid", "paid"
+            $table->enum('status',(['Paid', 'Unpaid'])); // e.g., "unpaid", "paid"
             $table->timestamps();
 
             // Foreign key constraint

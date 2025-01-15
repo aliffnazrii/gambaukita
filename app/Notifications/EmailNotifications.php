@@ -43,8 +43,20 @@ class EmailNotifications extends Notification
                 $this->buttonText = 'Go to Dashboard';
                 break;
 
-            case 'Booking':
-                $this->content = 'Your Booking has been placed successfully!';
+            case 'create_Booking_client':
+                $this->content = 'Your Booking at ' . $this->activityDetails['event_date'] . 'has been placed successfully. Click the link below to view your booking details.';
+                $this->actionUrl = url(route('bookings.show', $this->activityDetails['id']));
+                $this->buttonText = 'View Booking';
+                break;
+
+            case 'create_Booking_owner':
+                $this->content = 'A Booking at ' . $this->activityDetails['event_date'] . 'has been placed successfully. Click the link below to view the recent made booking details.';
+                $this->actionUrl = url(route('bookings.show', $this->activityDetails['id']));
+                $this->buttonText = 'View Booking';
+                break;
+
+            case 'pay_balance':
+                $this->content = 'A Booking at ' . $this->activityDetails['event_date'] . 'has been fully paid. Click the link below to view the paid booking details.';
                 $this->actionUrl = url(route('bookings.show', $this->activityDetails['id']));
                 $this->buttonText = 'View Booking';
                 break;
@@ -55,16 +67,28 @@ class EmailNotifications extends Notification
                 $this->buttonText = 'View Account';
                 break;
 
+            case 'create_schedule':
+                $this->content = 'Schedule has been added !';
+                $this->actionUrl = url('/owner/schedule');
+                $this->buttonText = 'View Schedule';
+                break;
+
+            case 'update_schedule':
+                $this->content = 'Schedule has been updated !';
+                $this->actionUrl = url('/owner/schedule');
+                $this->buttonText = 'View Schedule';
+                break;
+
             case 'profile_picture_update':
                 $this->content = 'Your profile picture has been successfully updated!';
-                $this->actionUrl = url('/users/' . $this->user->id . '/edit');
+                $this->actionUrl = url('/users/' . $this->user->id);
                 $this->buttonText = 'View Account';
                 break;
 
             case 'update_booking':
-                $this->content = 'Your booking has been successfully updated!';
+                $this->content = 'Your booking status has been updated!';
                 $this->actionUrl = url(route('bookings.show', $this->activityDetails['id']));
-                $this->buttonText = 'View Updated Booking';
+                $this->buttonText = 'View Booking';
                 break;
 
             case 'payment_succeeded':
