@@ -21,20 +21,15 @@ use PDO;
 
 class UserController extends Controller
 {
-    // Display a listing of users
+
     public function index()
     {
         $users = User::all();
         return view('users.index', compact('users'));
     }
 
-    // Show the form for creating a new user
-    public function create()
-    {
-        return view('users.create');
-    }
 
-    // Store a newly created user in the database
+
     public function store(Request $request)
     {
         $request->validate([
@@ -77,20 +72,18 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'User created successfully.');
     }
 
-    // Display the specified user
     public function show(User $user)
     {
         $bookings = Booking::with('package')->where('user_id', $user->id)->get();
         return view('client.profile', compact('user', 'bookings'));
     }
 
-    // Show the form for editing the specified user
+
     public function edit(User $user)
     {
         return view('client.profile', compact('user'));
     }
 
-    // Update the specified user in the database
     public function update(Request $request, User $user)
     {
         $reqval = $request->validate([
@@ -116,7 +109,7 @@ class UserController extends Controller
             $data = [
                 'title' => 'GambauKita',
                 'message' => 'Information Update Succeed',
-                'url' => '/users/' . '$user->id',
+                'url' => '/users/' . $user->id,
             ];
 
             $Notification = new UserController();

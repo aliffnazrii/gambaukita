@@ -111,14 +111,15 @@ class PackageController extends Controller
             'image_urls' => $urls
         ]);
     }
-    // Display the specified package
+ 
+    
     public function show($id)
     {
         $package = Package::with('images')->findOrFail($id);
         return view('owner.open-package', compact('package'));
     }
 
-    // Show the form for editing the specified package
+ 
     public function edit($id)
     {
         $package = Package::with('images')->findOrFail($id);
@@ -148,7 +149,7 @@ class PackageController extends Controller
 
 
         if ($package->update($validatedData)) {
-            $newuser = User::all();
+            $newuser = User::where('role','Owner')->get();
 
             $data = [
                 'title' => 'GambauKita',
