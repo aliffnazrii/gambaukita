@@ -139,7 +139,7 @@ class UserController extends Controller
             $data = [
                 'title' => 'GambauKita',
                 'message' => 'Information Update Succeed',
-                'url' => '/users/' . '$user->id',
+                'url' => '/users/' . $user->id,
             ];
 
             $Notification = new UserController();
@@ -172,7 +172,7 @@ class UserController extends Controller
             $data = [
                 'title' => 'GambauKita',
                 'message' => 'Password Updated',
-                'url' => '/users/' . '$user->id',
+                'url' => '/users/' . $user->id,
             ];
 
             $Notification = new UserController();
@@ -222,7 +222,7 @@ class UserController extends Controller
             $data = [
                 'title' => 'GambauKita',
                 'message' => 'Profile Picture Updated',
-                'url' => '/users/' . '$user->id',
+                'url' => '/users/' . $user->id,
             ];
 
             $Notification = new UserController();

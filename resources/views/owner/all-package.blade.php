@@ -177,9 +177,6 @@
                                 </td>
                             </tr>
 
-
-
-
                             <!-- Delete Modal -->
                             <div class="modal fade" id="basicModal{{ $package->id }}">
                                 <div class="modal-dialog" role="document">
@@ -200,8 +197,6 @@
                                                 <button type="button" class="btn btn-secondary"
                                                     data-dismiss="modal">Cancel</button>
                                             </form>
-
-
                                         </div>
                                     </div>
                                 </div>
