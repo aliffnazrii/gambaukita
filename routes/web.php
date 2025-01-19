@@ -7,7 +7,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PackageImageController;
 use App\Http\Controllers\ScheduleController;
-// use App\Http\Controllers\PortfolioController;
+use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\CheckUserRole;
@@ -29,7 +29,7 @@ Route::resource('payments', PaymentController::class)->middleware('clientLogin')
 Route::resource('invoices', InvoiceController::class)->middleware('clientLogin');
 Route::resource('package-images', PackageImageController::class)->middleware('ownerLogin');
 Route::resource('schedules', ScheduleController::class)->middleware('ownerLogin');
-// Route::resource('portfolios', PortfolioController::class);
+Route::resource('portfolios', PortfolioController::class);
 Route::resource('users', UserController::class);
 
 

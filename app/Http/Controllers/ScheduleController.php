@@ -71,7 +71,7 @@ class ScheduleController extends Controller
             $data = [
                 'title' => 'GambauKita',
                 'message' => 'New Schedule Added.',
-                'url' => 'owner/schedule', // Correct way to use the user's ID
+                'url' => route('owner.schedule'), // Correct way to use the user's ID
             ];
 
             foreach ($newuser as $owner) {

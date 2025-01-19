@@ -269,7 +269,7 @@ class BookingController extends Controller
 
                             $data = [
                                 'title' => 'GambauKita',
-                                'message' => 'A booking at' . \Carbon\Carbon::parse($booking->event_date)->format('d M, Y') . ' has been fully paid.',
+                                'message' => 'A booking at ' . \Carbon\Carbon::parse($booking->event_date)->format('d M, Y') . ' has been fully paid.',
                                 'url' => route('bookings.edit', $booking->id),
                             ];
 

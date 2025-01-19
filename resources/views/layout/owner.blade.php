@@ -92,9 +92,7 @@
                             <div class="drop-down dropdown-profile animated bounceInDown">
                                 <div class="dropdown-content-body">
                                     <ul>
-                                        <li class="nav-item"><a class="nav-link" href="#"><i
-                                                    class="mdi mdi-email"></i>Inbox</a>
-                                        </li>
+                                       
                                         @guest
                                             @if (Route::has('login'))
                                                 <li class="nav-item">
@@ -166,6 +164,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="{{ route('owner.schedule') }}">Schedule</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{ route('portfolios.index') }}">Portfolio</a>
                     </li>
 
                     <li class="nav-item">

@@ -56,7 +56,7 @@ class EmailNotifications extends Notification
                 break;
 
             case 'pay_balance':
-                $this->content = 'A Booking at ' . $this->activityDetails['event_date'] . 'has been fully paid. Click the link below to view the paid booking details.';
+                $this->content = 'A Booking has been fully paid. Click the link below to view the paid booking details.';
                 $this->actionUrl = url(route('bookings.show', $this->activityDetails['id']));
                 $this->buttonText = 'View Booking';
                 break;
