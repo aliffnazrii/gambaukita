@@ -159,14 +159,14 @@
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="{{ route('owner.viewClients') }}">Clients</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item"> 
                         <a class="nav-link" aria-current="page" href="{{ route('owner.package') }}">Packages</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="{{ route('owner.schedule') }}">Schedule</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{{ route('portfolios.index') }}">Portfolio</a>
+                        <a class="nav-link" aria-current="page" href="{{ route('owner.portfolio') }}">Portfolio</a>
                     </li>
 
                     <li class="nav-item">

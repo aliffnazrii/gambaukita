@@ -93,7 +93,7 @@ class PortfolioController extends Controller
         ]);
 
         $portfolio = Portfolio::findOrFail($id);
-        $portfolio->update($validatedData);
+        $portfolio->update($validatedData); 
 
         return redirect()->route('owner.portfolio')->with('success', 'Portfolio updated successfully.');
     }

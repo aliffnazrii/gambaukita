@@ -177,6 +177,10 @@ class UserController extends Controller
 
             $Notification = new UserController();
             $Notification->sendNotification($notiId, $data);
+            $email = new NotificationController();
+            $email->sendEmail($notiId, 'update_password', [
+                'id' => $notiId->id,
+            ]);
         }
 
         return redirect()->route('owner.profile')->with('success', 'Password updated successfully.');

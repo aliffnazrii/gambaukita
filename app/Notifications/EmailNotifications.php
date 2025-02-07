@@ -67,6 +67,12 @@ class EmailNotifications extends Notification
                 $this->buttonText = 'View Account';
                 break;
 
+            case 'update_password':
+                $this->content = 'Your password has been successfully updated!';
+                $this->actionUrl = url('/users/' . $this->user->id . '/edit');
+                $this->buttonText = 'View Account';
+                break;
+
             case 'create_schedule':
                 $this->content = 'Schedule has been added !';
                 $this->actionUrl = url('/owner/schedule');
@@ -83,14 +89,20 @@ class EmailNotifications extends Notification
                 $this->content = 'Your profile picture has been successfully updated!';
                 $this->actionUrl = url('/users/' . $this->user->id);
                 $this->buttonText = 'View Account';
-                break;
+                break; 
 
             case 'update_booking':
                 $this->content = 'Your booking status has been updated!';
-                $this->actionUrl = url(route('bookings.show', $this->activityDetails['id']));
+                $this->actionUrl = url('/bookings/'.$this->activityDetails['booking_id']);
                 $this->buttonText = 'View Booking';
                 break;
-
+                
+                case 'booking_completed':
+                    $this->content = 'Your booking has been completed successfully!';
+                    $this->actionUrl = url('/bookings/'. $this->activityDetails->id);
+                    $this->buttonText = 'View Completed Booking';
+                    break;
+                    
             case 'payment_succeeded':
                 $this->content = 'Your payment has been successfully processed!';
                 $this->actionUrl = url('/payments/' . $this->activityDetails['payment_id']);
@@ -103,11 +115,6 @@ class EmailNotifications extends Notification
                 $this->buttonText = 'View Invoice';
                 break;
 
-            case 'booking_completed':
-                $this->content = 'Your booking has been completed successfully!';
-                $this->actionUrl = url(route('bookings.show', $this->activityDetails['id']));
-                $this->buttonText = 'View Completed Booking';
-                break;
 
             case 'booking_scheduled':
                 $this->content = 'Your booking has been scheduled for ' . $this->activityDetails['scheduled_date'];
@@ -143,7 +150,7 @@ class EmailNotifications extends Notification
                 'content' => $this->content,
                 'action_url' => $this->actionUrl,
                 'button_text' => $this->buttonText,
-                'website_url' => url('/')  // Optional, you can replace it with the actual website URL
+                'website_url' => url('gambaukita.com/')  // Optional, you can replace it with the actual website URL
             ]);
     }
 }

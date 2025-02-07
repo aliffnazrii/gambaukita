@@ -356,13 +356,14 @@ class BookingController extends Controller
             'progress_status' => 'required|in:Pending,Booked,Waiting,Completed,Cancelled', // Only allow specific statuses
             'link' => $request->progress_status === 'Completed' ? 'required|url' : 'nullable', // Conditionally required for 'Completed'
         ]);
-        $booking = Booking::findOrFail($id);
+        $bookings = Booking::findOrFail($id);
 
 
         #NOTIFICATION
-        if ($booking->update($validatedData)) {
+        if ($bookings->update($validatedData)) {
 
             $user =  Auth::user();
+            $booking = Booking::findOrFail($bookings->id);
 
             if ($user) {
 
@@ -374,8 +375,11 @@ class BookingController extends Controller
                 ];
 
                 #EMAIL NOTI
+                $receiver = User::findOrFail($booking->user_id);
                 $email = new NotificationController();
-                $email->sendEmail($user, 'update_booking', [$booking]);
+                $email->sendEmail($receiver, 'update_booking', [
+                    'booking_id' => $booking->id,
+                ]);
             }
 
             #NOTIFY OWNER
@@ -397,7 +401,9 @@ class BookingController extends Controller
                 foreach ($newuser as $owner) {
                     $Notification = new NotificationController();
                     $Notification->sendNotification($owner, $data);
-                    // $email->sendEmail($user, 'create_booking_owner', [$booking]);
+                    $email->sendEmail($user, 'create_booking_owner', [
+                        'booking_id' => $booking->id,
+                    ]);
                 }
             }
         }

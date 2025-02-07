@@ -84,8 +84,8 @@ Route::put('/owner/updatePassword/{user}', [UserController::class, 'updatePasswo
 Route::post('/upload-package', [PackageController::class, 'uploadPackageImage'])->name('packages.uploadImage')->middleware('ownerLogin');
 
 #portfolios management route
-// Route::get('/owner/portfolios', [PortfolioController::class, 'ownerPortfolio'])->name('owner.portfolio')->middleware('ownerLogin');
-// Route::delete('/owner/portfolios/delete/{id}', [PortfolioController::class, 'destroy'])->name('portfolios.destroy')->middleware('ownerLogin');
+Route::get('/owner/portfolios', [PortfolioController::class, 'ownerPortfolio'])->name('owner.portfolio')->middleware('ownerLogin');
+Route::delete('/owner/portfolios/delete/{id}', [PortfolioController::class, 'destroy'])->name('portfolios.destroy')->middleware('ownerLogin');
 
 
 #booking management route
