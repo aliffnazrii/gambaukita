@@ -18,7 +18,7 @@
                             <th class="py-2 px-4 border-b border-gray-300 text-left text-gray-700">Client</th>
                             <th class="py-2 px-4 border-b border-gray-300 text-left text-gray-700">Email</th>
                             <th class="py-2 px-4 border-b border-gray-300 text-left text-gray-700">Phone</th>
-                            
+
                             <th class="py-2 px-4 border-b border-gray-300 text-left text-gray-700">Action</th>
                         </tr>
                     </thead>
@@ -37,8 +37,9 @@
                                     {{ $user->name }}
                                 </td>
                                 <td class="py-2 px-4 border-b border-gray-300">{{ $user->email }}</td>
-                                <td class="py-2 px-4 border-b border-gray-300">{{ $user->phone }}</td>
-                                
+                                <td class="py-2 px-4 border-b border-gray-300">
+                                    {{ $user->phone ? $user->phone : 'Not Available' }}</td>
+
                                 <td class="py-2 px-4 border-b border-gray-300">
                                     <!-- Trigger Modal -->
                                     <button type="button" class="btn btn-primary" data-toggle="modal"
@@ -66,7 +67,8 @@
                                                     <img src="{{ asset($user->picture) }}" alt="User Picture"
                                                         style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 15px;">
                                                 @else
-                                                    <img src="{{ asset('assets/images/avatar/3.jpg') }}" alt="Default Picture"
+                                                    <img src="{{ asset('assets/images/avatar/3.jpg') }}"
+                                                        alt="Default Picture"
                                                         style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 15px;">
                                                 @endif
                                             </div>
@@ -86,30 +88,31 @@
                                             <div class="form-group">
                                                 <label for="phone"><strong>Phone:</strong></label>
                                                 <input type="text" class="form-control" id="phone"
-                                                    value="{{ $user->phone }}" readonly>
+                                                    value="{{ $user->phone ? $user->phone : 'Not Available' }}" readonly>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="address"><strong>Address:</strong></label>
-                                                <textarea class="form-control" id="address" rows="3" readonly>{{ $user->address }}</textarea>
+                                                <textarea class="form-control" id="address" rows="3" readonly>{{ $user->address ? $user->address : 'Not Available' }}</textarea>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="postcode"><strong>Postcode:</strong></label>
                                                 <input type="text" class="form-control" id="postcode"
-                                                    value="{{ $user->postcode }}" readonly>
+                                                    value="{{ $user->postcode ? $user->postcode : 'Not Available' }}"
+                                                    readonly>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="city"><strong>City:</strong></label>
                                                 <input type="text" class="form-control" id="city"
-                                                    value="{{ $user->city }}" readonly>
+                                                    value="{{ $user->city ? $user->city : 'Not Available' }}" readonly>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="state"><strong>State:</strong></label>
                                                 <input type="text" class="form-control" id="state"
-                                                    value="{{ $user->state }}" readonly>
+                                                    value="{{ $user->state ? $user->state : 'Not Available' }}" readonly>
                                             </div>
                                         </div>
 
