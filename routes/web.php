@@ -54,7 +54,7 @@ Route::get('/packages/view/{id}',[PackageController::class, 'viewPackage'])->nam
 
 #UPDATE PROFILE PICTURE
 Route::put('/users/update-picture/{id}', [UserController::class, 'updateProfilePicture'])->name('update.picture')->middleware('clientLogin');
-
+ 
 
 Route::post('/checkdate', [BookingController::class, 'checkdate'])->name('booking.checkdate')->middleware('clientLogin');
 Route::get('/invoice/{id}', [BookingController::class, 'showInvoice'])->name('booking.showInvoice')->middleware('clientLogin');

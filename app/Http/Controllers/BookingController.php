@@ -176,13 +176,16 @@ class BookingController extends Controller
 
                             $data = [
                                 'title' => 'GambauKita',
-                                'message' => 'A booking at' . \Carbon\Carbon::parse($booking->event_date)->format('d M, Y') . ' has been made.',
+                                'message' => 'A booking at ' . \Carbon\Carbon::parse($booking->event_date)->format('d M, Y') . ' has been made.',
                                 'url' => 'bookings.index',
                             ];
 
                             #EMAIL NOTI
                             $email = new NotificationController();
-                            $email->sendEmail($user, 'create_booking_client', [$booking]);
+                            $email->sendEmail($user, 'create_booking_client',[
+                                'id' => $booking->id,
+                                'event_date' => $booking->event_date,
+                            ]);
                         }
 
                         #NOTIFY OWNER
@@ -194,14 +197,17 @@ class BookingController extends Controller
 
                             $data = [
                                 'title' => 'GambauKita',
-                                'message' => 'A booking at' . \Carbon\Carbon::parse($booking->event_date)->format('d M, Y') . ' has been made.',
+                                'message' => 'A booking at ' . \Carbon\Carbon::parse($booking->event_date)->format('d M, Y') . ' has been made.',
                                 'url' => 'owner.booking',
                             ];
 
                             foreach ($newuser as $owner) {
                                 $Notification = new NotificationController();
                                 $Notification->sendNotification($owner, $data);
-                                $email->sendEmail($user, 'create_booking_owner', [$booking]);
+                                $email->sendEmail($user, 'create_booking_owner', [
+                                    'id' => $booking->id,
+                                    'event_date' => $booking->event_date,
+                                ]);
                             }
                         }
                     }
@@ -256,7 +262,7 @@ class BookingController extends Controller
 
                             #EMAIL NOTI
                             $email = new NotificationController();
-                            $email->sendEmail($user, 'pay_balance', [$booking]);
+                            $email->sendEmail($user, 'pay_balance', ['id' => $booking->id]);
                         }
 
                         #NOTIFY OWNER
@@ -278,7 +284,7 @@ class BookingController extends Controller
                             foreach ($newuser as $owner) {
                                 $Notification = new NotificationController();
                                 $Notification->sendNotification($owner, $data);
-                                $email->sendEmail($user, 'create_booking_owner', [$booking]);
+                                $email->sendEmail($user, 'create_booking_owner', ['id' => $booking->id, 'event_date' => $booking->event_date]);
                             }
                         }
                     }

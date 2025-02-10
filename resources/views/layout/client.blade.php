@@ -107,7 +107,7 @@
                         <div class="drop-down dropdown-profile animated bounceInDown">
                             <div class="dropdown-content-body">
                                 <ul>
-                                   
+
                                     @guest
                                         @if (Route::has('login'))
                                             <li class="nav-item">
@@ -185,7 +185,7 @@
                             href="/login"
                             @endauth><i
                             class="mdi mdi-calendar-check"></i> <span class="nav-text">Booking</span></a></li>
- 
+
                 <li><a
                         @auth()
                             href="{{ route('bookings.index') }}"
@@ -193,15 +193,19 @@
                             href="/login"
                             @endauth><i
                             class="mdi mdi-history"></i> <span class="nav-text">History</span></a></li>
-                <li><a
-                        @auth()
-                                    href="{{ route('users.show', AUTH::user()->id) }}"
-                                    @else
-                                    href="/login"
-                                    @endauth><i
-                            class="mdi mdi-account"></i> <span class="nav-text">Profile</span></a></li>
+                <li><a href="{{ route('portfolios.index') }}"><i class="mdi mdi-image-multiple"></i> <span
+                            class="nav-text">Portfolios</span></a>
+
+
                 <li><a href="/about"><i class="mdi mdi-information"></i> <span class="nav-text">About Us</span></a>
                 </li>
+                <li><a
+                        @auth()
+                                href="{{ route('users.show', AUTH::user()->id) }}"
+                                @else
+                                href="/login"
+                                @endauth><i
+                            class="mdi mdi-account"></i> <span class="nav-text">Profile</span></a></li>
                 <!-- <li><a href="/login"><i class="mdi mdi-login"></i> <span class="nav-text">Login</span></a></li> -->
             </ul>
         </div>

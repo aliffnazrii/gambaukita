@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\NotificationController;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
@@ -63,10 +66,50 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user =  User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+
+
+
+        if ($user) {
+
+            $data = [
+                'title' => 'GambauKita',
+                'message' => 'Thank you for signing up for GambauKita',
+                'url' => route('users.show', $user->id),
+            ];
+
+            $Notification = new UserController();
+            $Notification->sendNotification($user, $data); // Pass the user model and data
+
+            #EMAIL NOTI
+            $email = new NotificationController();
+            $email->sendEmail($user, 'user_registered', [
+                'id' => $user->id,
+            ]);
+        }
+
+        $owner = User::where('role', 'Owner')->get();
+
+        if ($owner) {
+            // Define notification data
+            $data = [
+                'title' => 'GambauKita',
+                'message' => 'New User Signed Up !',
+                'url' => route('owner.viewClients'), // Correct way to use the user's ID
+            ];
+
+            // Create the notification instance and send it
+
+            foreach ($owner as $owners) {
+                $Notification = new UserController();
+                $Notification->sendNotification($owners, $data); // Pass the user model and data
+            }
+        }
+
+        return $user;
     }
 }
