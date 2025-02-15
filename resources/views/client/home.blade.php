@@ -10,8 +10,8 @@
 
 
 
-    <div class="card card-body">
-        <div class="container-fluid">
+    {{-- <div class="card card-body"> --}}
+        {{-- <div class="container-fluid"> --}}
             <!-- Banner Section -->
             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                 <ol class="carousel-indicators">
@@ -19,30 +19,51 @@
                     <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
                     <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
                     <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="4"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="5"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="6"></li>
                 </ol>
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img class="d-block w-100" src="{{ asset('/storage/banner/banner1.png') }}" alt="First slide">
+                        <img class="d-block w-100 img-fluid" src="{{ asset('/storage/banner/banner1.png') }}" alt="First slide">
                         <div class="carousel-caption d-none d-md-block">
-
+                            <!-- Add captions here if needed -->
                         </div>
                     </div>
                     <div class="carousel-item">
-                        <img class="d-block w-100" src="{{ asset('/storage/banner/banner2.png') }}" alt="Second slide">
+                        <img class="d-block w-100 img-fluid" src="{{ asset('/storage/banner/banner2.png') }}" alt="Second slide">
                         <div class="carousel-caption d-none d-md-block">
-
+                            <!-- Add captions here if needed -->
                         </div>
                     </div>
                     <div class="carousel-item">
-                        <img class="d-block w-100" src="{{ asset('/storage/banner/banner3.png') }}" alt="Third slide">
+                        <img class="d-block w-100 img-fluid" src="{{ asset('/storage/banner/banner3.png') }}" alt="Third slide">
                         <div class="carousel-caption d-none d-md-block">
-
+                            <!-- Add captions here if needed -->
                         </div>
                     </div>
                     <div class="carousel-item">
-                        <img class="d-block w-100" src="{{ asset('/storage/banner/banner4.png') }}" alt="Third slide">
+                        <img class="d-block w-100 img-fluid" src="{{ asset('/storage/banner/banner4.png') }}" alt="Fourth slide">
                         <div class="carousel-caption d-none d-md-block">
-
+                            <!-- Add captions here if needed -->
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img class="d-block w-100 img-fluid" src="{{ asset('/storage/banner/banner5.png') }}" alt="Fifth slide">
+                        <div class="carousel-caption d-none d-md-block">
+                            <!-- Add captions here if needed -->
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img class="d-block w-100 img-fluid" src="{{ asset('/storage/banner/banner6.png') }}" alt="Sixth slide">
+                        <div class="carousel-caption d-none d-md-block">
+                            <!-- Add captions here if needed -->
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img class="d-block w-100 img-fluid" src="{{ asset('/storage/banner/banner7.png') }}" alt="Seventh slide">
+                        <div class="carousel-caption d-none d-md-block">
+                            <!-- Add captions here if needed -->
                         </div>
                     </div>
                 </div>
@@ -178,6 +199,6 @@
                     <a href="/contact" class="btn btn-primary btn-lg">Contact Us</a>
                 </div>
             </section>
-        </div>
-    </div>
+        {{-- </div> --}}
+    {{-- </div> --}}
 @endsection

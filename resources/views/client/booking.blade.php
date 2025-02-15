@@ -30,7 +30,7 @@
 
 
     <div class="row mt-3">
-        <div class="col-9 m-auto">
+        <div class="col-11 m-auto">
             <div class="card card-body text-center">
 
 
@@ -80,10 +80,9 @@
                                     <script>
                                         document.addEventListener('DOMContentLoaded', function() {
                                             var calendarEl = document.getElementById('calendar');
-
+                            
                                             // Create the events array directly in JavaScript
                                             var events = [
-
                                                 @foreach ($schedules as $schedule)
                                                     {
                                                         title: "{{ 'Unavailable' }}",
@@ -91,8 +90,7 @@
                                                         end: "{{ $schedule->end }}", // Combine date and time for the end field
                                                     },
                                                 @endforeach
-
-
+                            
                                                 @foreach ($bookings as $schedule)
                                                     {
                                                         title: "{{ 'Booked' }}",
@@ -100,14 +98,29 @@
                                                         end: "{{ $schedule->event_date }}",
                                                     },
                                                 @endforeach
-
                                             ];
-
+                            
                                             var calendar = new FullCalendar.Calendar(calendarEl, {
-                                                initialView: 'dayGridMonth', // Switch to a week view with times
+                                                initialView: 'dayGridMonth', // Default view
+                                                headerToolbar: {
+                                                    left: 'prev,next today',
+                                                    center: 'title',
+                                                    right: 'dayGridMonth,timeGridWeek,timeGridDay' // Add different views
+                                                },
                                                 events: events, // Use the directly generated array
+                                                height: 'auto', // Make the height responsive
+                                                contentHeight: 'auto', // Adjust content height
+                                                aspectRatio: 1.5, // Adjust the aspect ratio for better responsiveness
+                                                eventTimeFormat: { // Format time display
+                                                    hour: '2-digit',
+                                                    minute: '2-digit',
+                                                    hour12: true
+                                                },
+                                                windowResize: function(view) {
+                                                    calendar.updateSize(); // Update the calendar size on window resize
+                                                }
                                             });
-
+                            
                                             calendar.render();
                                         });
                                     </script>

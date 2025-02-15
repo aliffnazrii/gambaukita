@@ -230,15 +230,17 @@
                 <div class="col-md-6">
                     <h5>Useful Links</h5>
                     <ul class="list-unstyled">
-                        <li><a href="/privacy-policy">Privacy Policy</a></li>
-                        <li><a href="/terms-of-service">Terms of Service</a></li>
-                        <li><a href="/faq">FAQ</a></li>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/bookings/create">Bookings</a></li>
+                        <li><a href="/packages">Packages</a></li>
+                        <li><a href="/portfolios">Portfolio</a></li>
+                        <li><a href="/users/{{ Auth::user()->id }}">Profile</a></li>
                     </ul>
                 </div>
                 <div class="col-md-6">
                     <h5>Contact Us</h5>
                     <p>Email: support@gambaukita.com</p>
-                    <p>Phone: +123 456 7890</p>
+                    <p>Phone: +6018-9839423</p>
                 </div>
             </div>
             <div class="row">
