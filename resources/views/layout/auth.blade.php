@@ -197,7 +197,7 @@
                             <li><a href="/bookings/create">Bookings</a></li>
                             <li><a href="/packages">Packages</a></li>
                             <li><a href="/portfolios">Portfolio</a></li>
-                            <li><a href="/users/{{ Auth::user()->id }}">Profile</a></li>
+                            <li><a href="/users/{{ Auth::user()->id ?? '' }}">Profile</a></li>
                         </ul>
                     </div>
                     <div class="col-md-6">
