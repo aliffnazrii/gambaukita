@@ -197,7 +197,12 @@
                             <li><a href="/bookings/create">Bookings</a></li>
                             <li><a href="/packages">Packages</a></li>
                             <li><a href="/portfolios">Portfolio</a></li>
-                            <li><a href="/users/{{ Auth::user()->id ?? '' }}">Profile</a></li>
+                            @auth
+                                <li><a href="/users/{{ Auth::user()->id ?? '' }}">Profile</a></li>
+                            @else
+                                <li><a href="/login}}">Profile</a></li>
+
+                            @endauth
                         </ul>
                     </div>
                     <div class="col-md-6">
