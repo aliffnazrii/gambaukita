@@ -95,15 +95,9 @@ class UserController extends Controller
             'state' => 'nullable|string|max:100',
         ]);
 
-
-
         if ($user->update($reqval)) {
-
-
             $email = new UserController();
             $email->sendEmail($user, 'update_account', [$user->id]);
-
-
 
             $notiId = Auth::user();
             $data = [
