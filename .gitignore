@@ -22,3 +22,4 @@ yarn-error.log
 /.zed
 gambaukita.zip
 .env.example
+*.zip
